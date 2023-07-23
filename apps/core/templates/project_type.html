@@ -1,0 +1,96 @@
+{% extends "base_generic.html" %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="col-md-11 ml-3">
+    <div class="container-fluid ml-2" id="user_list"> 
+      <div class="user_headline mx-2 my-4">
+        <h5><b><u>Project Type List</u></b></h5>
+      </div>
+      <div class="mx-2">
+        <a href="{% url 'new-project-type' %}"><u>New Project Type</u></a>
+      </div>
+
+      <div class="pagination d-flex flex-row-reverse">
+        <div class="p-3">
+          <p>
+            {% if prj.has_previous %}
+              <span class="userpage"><a href="?page={{ prj.previous_page_number }}">Previous</a></span>
+            {% else %}
+              <span class="userpage off">Previous</span>
+            {% endif %}
+            {% for pg in prj.paginator.page_range %}
+              {% if prj.number == pg %}
+                <span class="userpage active">{{ pg }}</span>
+              {% else %}
+                <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+              {% endif %}
+            {% endfor %}
+            {% if prj.has_next %}
+              <span class="userpage"><a href="?page={{ prj.next_page_number }}">Next</a></span>
+            {% else %}
+              <span class="userpage off">Next</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <div>
+        {% if prj.object_list %}
+        <table class="table userlist">
+          <thead>
+            <tr>
+              <th>Project Type</th><th>Category</th>
+              {%  if request.user|is_in_group:"admin" %}
+              <th>Edit</th><th>Delete</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for p_type in prj.object_list %}
+            <tr {% if not p_type.active %}class="inactive"{% endif %}>
+                <td>{{ p_type.proj_type }}</td><td>{{ p_type.group }}</td>
+                {%  if request.user|is_in_group:"admin" %}
+                <td><a href="{% url 'edit-project-type' typepk=p_type.id %}">Edit</a></td>
+                <td><a href="{% url 'delete-project-type' typepk=p_type.id %}">Delete</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>    
+        </table>
+
+        {% else %}
+          <p>There are no project types.</p>
+        {% endif %}
+      </div>
+
+      <div class="pagination d-flex flex-row-reverse">
+        <div class="p-3">
+          <p>
+            {% if prj.has_previous %}
+              <span class="userpage"><a href="?page={{ prj.previous_page_number }}">Previous</a></span>
+            {% else %}
+              <span class="userpage off">Previous</span>
+            {% endif %}
+            {% for pg in prj.paginator.page_range %}
+              {% if prj.number == pg %}
+                <span class="userpage active">{{ pg }}</span>
+              {% else %}
+                <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+              {% endif %}
+            {% endfor %}
+            {% if prj.has_next %}
+              <span class="userpage"><a href="?page={{ prj.next_page_number }}">Next</a></span>
+            {% else %}
+              <span class="userpage off">Next</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "base_generic.html" %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Services</u></b></h5>
+  </div>
+  <div class="mx-2">
+    {% if request.user|is_in_group:"admin" %}
+    <a href="{% url 'new-service' %}"><u>Add a Service</u></a>
+    {% endif %}
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p>
+        {% if srv.has_previous %}
+          <span class="userpage"><a href="?page={{ srv.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in srv.paginator.page_range %}
+          {% if srv.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if srv.has_next %}
+          <span class="userpage"><a href="?page={{ srv.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    {% if srv.object_list %}
+    <table class="table appointments">
+      <thead>
+        <tr class="text-center" id="appt_head">
+          <th>Customer Name</th><th>Address</th><th>Phone Number</th>
+          <th>Date Customer Called</th><th>Scheduled Service Date</th>
+          {% if request.user|is_in_group:"admin" %}
+          <th>Send to Archives</th>
+          {% endif %}<th>View</th>
+          {% if request.user|is_in_group:"admin" %}
+          <th>Edit</th><th>Delete</th>{% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for service in srv.object_list %}
+        <tr>
+            <td>{{ service.customer_name }}</td><td>{{ service.customer_address }}</td>
+            <td>{{ service.phone_number }}</td>
+            <td class="text-center">{{ service.cust_called }}</td><td class="text-center">{{ service.service_schedule }}</td>
+            {% if request.user|is_in_group:"admin" %}
+            <td class="text-center"><a id="send-confirmation"
+                                       href="{% url 'send-to-service-archive' servpk=service.id %}">Send</a></td>
+            {% endif %}
+            <td><a href="{% url 'service-detail' pk=service.id %}">View</a></td>
+            {% if request.user|is_in_group:"admin" %}
+            <td><a href="{% url 'edit-service' servpk=service.id %}">Edit</a></td>
+            <td><a href="{% url 'delete-service' servpk=service.id %}">Delete</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>    
+    </table>
+
+    {% else %}
+      <p>There are no service appointments.</p>
+    {% endif %}
+
+    <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p>
+        {% if srv.has_previous %}
+          <span class="userpage"><a href="?page={{ srv.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in srv.paginator.page_range %}
+          {% if srv.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if srv.has_next %}
+          <span class="userpage"><a href="?page={{ srv.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

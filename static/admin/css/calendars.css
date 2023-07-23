@@ -1,0 +1,228 @@
+/* install schedule */
+
+.calendar {
+    width: 98%;
+    margin: auto;
+    font-size: 13px;
+  }
+  
+  .calendar tr, .calendar td {
+    border: 3px solid black !important;
+  }
+  
+  .calendar th {
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+    color: #FF0000;
+    background-color: #D1DCF8;
+  }
+  
+  .calendar td {
+    width: 200px;
+    padding: 20px 0px 0px 5px;
+  }
+
+  .calendar td.empty {
+    vertical-align: top;
+    text-align: left;
+  }
+
+  .calendar td.full {
+      height: 150px;
+  }
+
+  .calendar tr.empty {
+      height: auto !important;
+  }
+  
+  .month {
+    font-size: 25px;
+  }
+  
+  .date {
+    font-size: 16px;
+  }
+  
+  ul {
+    height: 100%;
+    padding: 0px 5px 0px 20px;
+  }
+  
+  a {
+    color: #17a2b8;
+  }
+
+  .left {
+    float: left;
+  }
+  
+  .right {
+    float: right;
+  }
+  
+  .btn {
+    outline: none;
+    color: black;
+    background-color: transparent;
+    box-shadow: 0 0 0 0;
+  }
+  
+  .clearfix {
+    margin: 15px;
+  }
+
+  .job-table tr, .job-table td,
+  .job-table th{
+    font-size: x-small;
+    font-weight: normal;
+    border: 1px solid black !important;
+  }
+
+  table.job-table td{
+    padding: 1em;
+    color: #FF0000;
+  }
+
+  table.calendar td.full li#priority a {
+    position: relative;
+  }
+
+  .CalComment {
+       opacity: 0;
+       visibility: hidden;
+       position: fixed;
+       z-index: 100;
+       border: 1px;
+       background-color: lightskyblue;
+       border-style: solid;
+       border-width: 1px;
+       border-color: black;
+       border-radius: 20px;
+       padding: 3px;
+       color: black;
+       white-space: pre-wrap;
+       top: 20px;
+       left: 20px;
+       width: 50em;
+       height: auto;
+       min-height: 20em;
+       -webkit-transition: opacity 600ms, visibility 600ms;
+       transition: opacity 600ms, visibility 600ms;
+   }
+   
+ table.calendar td.full li#priority a:hover + span.CalComment {
+      visibility: visible !important;
+      opacity: 1 !important;
+  }
+
+  /* edit calendar */
+
+  .editcalendar {
+    width: 98%;
+    margin: 1em;
+    font-size: 13px;
+  }
+  
+  .editcalendar tr, .editcalendar td,
+  table.editcalendar, .editcalendar th {
+    border: 3px solid black !important;
+  }
+  
+  .editcalendar th {
+    padding: 20px;
+    text-align: center;
+    font-size: 18px;
+    color: #FF0000;
+    background-color: #D1DCF8;
+  }
+  
+  .editcalendar td {
+    width: 200px;
+    padding: 20px 0px 0px 5px;
+  }
+
+  .editcalendar td.full {
+      height: 150px;
+  }
+
+  .editcalendar tr.empty {
+      height: auto !important;
+  }
+  
+  .month {
+    font-size: 25px;
+  }
+  
+  .date {
+    font-size: 16px;
+  }
+  
+  ul {
+    height: 100%;
+    padding: 0px 5px 0px 20px;
+  }
+  
+  a {
+    color: #17a2b8;
+  }
+
+  .left {
+    float: left;
+  }
+  
+  .right {
+    float: right;
+  }
+  
+  .btn {
+    outline: none;
+    color: black;
+    background-color: transparent;
+    box-shadow: 0 0 0 0;
+  }
+  
+  .clearfix {
+    margin: 15px;
+  }
+
+  table.calendar-table tr, table.calendar-table td,
+  table.calendar-table th{
+    font-size: x-small;
+    font-weight: normal;
+    border: 1px solid black !important;
+  }
+
+  table.calendar-table td{
+    padding: 1em;
+  }
+
+  select#edit-installer-cal {
+    width: 11em;
+    height: auto;
+  }
+
+  input#edit-install-date-cal {
+    width: 11em;
+    height: auto;
+  }
+
+  /* edit sales appointment calendar */
+
+  select#edit-salesperson-cal,
+  input#edit-appointment-date-cal {
+    width: 11em;
+    height: auto;
+  }
+
+  .edit-appointment-table tr, .edit-appointment-table td,
+  .edit-appointment-table th{
+    font-size: x-small;
+    font-weight: normal;
+    border: 1px solid black !important;
+  }
+
+  table.edit-appointment-table td{
+    padding: 1em;
+    color: #FF0000;
+  }

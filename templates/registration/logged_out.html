@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+{% block extra_css %}
+    <style>
+        .base {border-bottom: 100vh solid #ffcc00 !important;}
+    </style>
+{% endblock %}
+{% block sidebar %}<!-- OVERWRITE SIDEBAR --> {% endblock %}
+
+{% block content %}
+    <p>Logged out</p>
+    <a href="{% url 'login' %}">Click here to log in again.</a>
+{% endblock %}

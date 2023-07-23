@@ -1,0 +1,129 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container my-4" style="width: 95%;">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Sales Commissions Page</u></b></h5>
+  </div>
+  <div class="container" style="width: 90%;">
+    <form class="salespay" enctype="multipart/form-data" method="post">
+      <div class="row mx-2">
+        <div class="col-sm">
+          <h5><b>Sales Commission Member: {{ pay_change.user.first_name }} {{ pay_change.user.last_name }}</b></h5>
+        </div>
+      </div>
+      {% if messages %}
+      <div class="row mx-2">
+        <div class="col-sm">
+          <ul class="messages" style="list-style-type: none; color: red;">
+            {% for message in messages %}
+              {% if forloop.first %}<li> {{ message }} </li>{% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+      {% csrf_token %}
+      <div class="row mx-2 my-3">
+        <div class="col-sm">
+          {{ form.salesperson }}
+        </div>
+        <div class="col-sm">
+          {{ form.date_added }}
+        </div>
+      </div>
+      <div class="row mx-2 my-3">
+        <div class="col-md">
+          Job Name:
+        </div>
+        <div class="col-md">
+          Status:
+        </div>
+        <div class="col-md">
+          Contract Amount:
+        </div>
+        <div class="col-md">
+          Commission:
+        </div>
+      </div>
+      {{ formset.management_form|crispy }}
+      {{ formset.non_form_errors }}
+      {% for form in formset %}
+      <div class="row form-row form-group mx-2 my-3">
+        <div class="col-md">
+          {% for hidden in form.hidden_fields %}
+            {{ hidden}}
+          {% endfor %}
+          {{ form.job_name|as_crispy_field }}
+        </div>
+        <div class="col-sm">
+          {{ form.status|as_crispy_field }}
+        </div>
+        <div class="col-sm">
+          {{ form.contract_amount|as_crispy_field }}
+        </div>
+        <div class="col-sm">
+          {{ form.commission|as_crispy_field }}
+        </div>
+        {{ form.id|as_crispy_field }}
+      </div>
+      {% endfor %}
+      <div class="row">
+        <div class="col-sm">
+          <button class="btn btn-outline-dark my-2 add-form-row">ADD NEW</button>
+        </div>
+      </div>
+      <div class="row mx-2 my-3 justify-content-end">
+        <div class="submit mx-1">
+          <button type="submit" name="save" class="btn btn-outline-dark my-2">Save</button>
+        </div>
+        {% if request.user|is_in_group:"admin" %}
+        <div class="submit mx-1">
+          <a type="button"
+          href="{% url 'payroll-to-archive' paypk=pay_change.id %}"
+          class="btn btn-outline-dark my-2">Send to Archive</a>
+        </div>
+        {% endif %} 
+      </div> 
+    </form>
+  </div>
+</div>
+<script type='text/javascript'>
+  function updateElementIndex(el, prefix, ndx) {
+      var id_regex = new RegExp('(' + prefix + '-\\d+)');
+      var replacement = prefix + '-' + ndx;
+      if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+      if (el.id) el.id = el.id.replace(id_regex, replacement);
+      if (el.name) el.name = el.name.replace(id_regex, replacement);
+  }
+  function cloneMore(selector, prefix) {
+      var newElement = $(selector).clone(true);
+      console.log(newElement);
+      var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+      newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
+          var name = $(this).attr('name');
+          var iname = name.replace(/[0-9]+/,total);
+          var id = 'id_' + iname;
+          $(this).attr({'name': iname, 'id': id}).val('').removeAttr('checked');
+      });
+      total++;
+      $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+      $(selector).after(newElement);
+      var conditionRow = $('.form-row:not(:last)');
+      conditionRow.find('.btn.add-form-row')
+      .removeClass('add-form-row').addClass('remove-form-row')
+      return false;
+  }
+
+  $(document).on('click', '.add-form-row', function(e){
+      e.preventDefault();
+      cloneMore(".form-row:last", "form");
+      return false;
+  });
+</script>
+{% endblock %}

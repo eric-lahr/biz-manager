@@ -1,0 +1,140 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Accounts Receivable</u></b></h5>
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p id="leadsort">
+        {% if accounts_receivable.has_previous %}
+          <span class="userpage"><a href="?page={{ accounts_receivable.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in accounts_receivable.paginator.page_range %}
+          {% if accounts_receivable.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if accounts_receivable.has_next %}
+          <span class="userpage"><a href="?page={{ accounts_receivable.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="col-lg-7" id="sort">
+    <form class="sortlead" method="post">
+      {% csrf_token %}
+      <div class="form-row" id="sort-form-row">
+        <div class="form-group col-lg-6 my-4">
+          {{ form.sort_by|as_crispy_field }}
+        </div>
+        <div class="form-group col-lg-3 my-4">
+          {{ form.order|as_crispy_field }}
+        </div>
+        
+        <div class="submit form-group col-lg-3">
+          <button type="submit" class="btn btn-outline-dark my-4" id="sortbtn">Show</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="container mt-2">
+    {% if accounts_receivable.object_list %}
+    <table class="table jobsinprogress">
+      <thead>
+        <tr>
+          <th>Customer Name</th><th>Address</th><th>Date Order Was Complete</th><th>Payment</th>
+          <th>Contract Amount</th><th>Breakdown</th>
+          {%  if request.user|is_in_group:"admin" %}
+          <th>Send Order to Jobs in Progress (job not complete)</th>
+          <th>Send Order to Leads (job cancelled)</th><th>Send Order to Archives (job done and paid for)</th>
+          {% endif %}
+          <th>View</th>
+          {%  if request.user|is_in_group:"admin" %}
+          <th>Edit</th><th>Delete</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for account in accounts_receivable.object_list %}
+        <tr {% if account.priority %} id="priority" {% endif %}>
+            <td>{{ account.client_id.name }} {{ account.client_id.last_name}}
+              {% if account.priority %}<span class="CellComment">{{ account.priority_msg }}</span>{% endif %}
+            </td>
+            <td>{{ account.client_id.address }} {% if account.client_id.address1 %} 
+                {{ account.client_id.address1 }} {% endif %}
+                {% if account.priority %}<span class="CellComment">{{ account.priority_msg }}</span>{% endif %}
+            </td>
+            <td class="text-center">{{ account.jobstatus.completion_date }}
+              {% if account.priority %}<span class="CellComment">{{ account.priority_msg }}</span>{% endif %}
+            </td>
+            <td>{{ account.payment.get_status_display }}
+              {% if account.priority %}<span class="CellComment">{{ account.priority_msg }}</span>{% endif %}
+            </td>
+            <td class="text-center">{{ account.contract_amount }}
+              {% if account.priority %}<span class="CellComment">{{ account.priority_msg }}</span>{% endif %}
+            </td>
+            <td>{{ account.payment.breakdown }}
+              {% if account.priority %}<span class="CellComment">{{ account.priority_msg }}</span>{% endif %}
+            </td>
+            {%  if request.user|is_in_group:"admin" %}
+            <td class="text-center"><a id="send-confirmation"
+                                      href="{% url 'send-to-jip' leadpk=account.id %}">Send</a></td>
+            <td class="text-center"><a href="{% url 'send-to-leads-run' leadpk=account.id %}">Send</a></td>
+            <td class="text-center"><a href="{% url 'send-to-archive' leadpk=account.id %}">Send</a></td>
+            {% endif %}
+            <td class="text-center"><a class="text-center" href="{% url 'account-detail' pk=account.id %}">View</a></td>
+            {%  if request.user|is_in_group:"admin" %}
+            <td><a class="text-center" href="{% url 'edit-account' leadpk=account.id %}">Edit</a></td>
+            <td><a class="text-center" href="{% url 'delete-job' leadpk=account.id %}">Delete</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>    
+    </table>
+
+    {% else %}
+      <p>There are no receivables.</p>
+    {% endif %}
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p id="leadsort">
+        {% if accounts_receivable.has_previous %}
+          <span class="userpage"><a href="?page={{ accounts_receivable.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in accounts_receivable.paginator.page_range %}
+          {% if accounts_receivable.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if accounts_receivable.has_next %}
+          <span class="userpage"><a href="?page={{ accounts_receivable.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

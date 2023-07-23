@@ -1,0 +1,125 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-11 offset-md-1">
+        <div class="row my-4">
+        {% if form.subject.errors %}
+        <ol>
+            {% for error in form.subject.errors %}
+            <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+        {% if form.non_field_errors %}
+        <ol>
+            {% for error in form.non_field_errors %}
+            <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+        </div>
+        <div class="row my-4"><h5><b><u>Add a Lead</u></b></h5></div>
+        <form class="newuser" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ form.name|as_crispy_field }}
+            {{ form.last_name|as_crispy_field }}
+            {{ form.address|as_crispy_field }}
+            {{ form.address1|as_crispy_field }}
+            {{ form.city|as_crispy_field }}
+            {{ form.state|as_crispy_field }}
+            {{ form.zip_code|as_crispy_field }}
+            {{ form.nmc_street|as_crispy_field }}
+            <div class="mb-2">
+                {{ form.home_phone|as_crispy_field }}
+            </div>
+            <div class="mb-2">
+                {{ form.cell_phone|as_crispy_field }}
+            </div>
+            <div class="mb-2">
+                {{ form.fax_number|as_crispy_field }}
+            </div>
+            {{ form.email|as_crispy_field }}
+            {{ form.detailed_instr|as_crispy_field }}
+            <div class="container-fluid mx-auto my-4" style="width: 500px;">
+                <input type="checkbox" name="priority-choice" id="priority-choice">
+                <label for="priority-choice">Priority</label>
+                <div class="reveal-if-active">
+                    Message:
+                    {{ form.priority_notes|as_crispy_field }}
+                </div>
+            </div>
+            {{ form.salesperson|as_crispy_field }}
+            <div class="mb-2">
+                {{ form.sales_date|as_crispy_field }}
+            </div>
+            <div class='container-fluid pl-0'>
+                <div class="form-row align-items-right mb-3">
+                    <div class="col-md-3">
+                        Date Appointment Run
+                    </div>
+                    <div id='date-appointment-run'>
+                        {{ form.date_appointment_run|as_crispy_field }}
+                    </div>
+                    <div class="mr-2">
+                        {{ form.time|as_crispy_field }}
+                    </div>
+                    <div>
+                        {{ form.time_ap|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+            {{ form.project_type|as_crispy_field }}
+            {{ form.association_approval|as_crispy_field }}
+            {{ form.permits|as_crispy_field }}
+            <div class="my-2">
+                {{ form.materials_ordered|as_crispy_field }}
+            </div>
+            {{ form.concrete_existing|as_crispy_field }}
+            <div class="my-2">
+                {{ form.footer_needed|as_crispy_field }}
+            </div>
+            <div class="container mx-auto" style="width: 300px;">
+                <div id="reveal-if-footer" class="ml-2" style="display:none;">
+                    <div class="my-2">
+                        Footer Dig Date:
+                        {{ form.footer_dig_date|as_crispy_field }}
+                    </div>
+                    <div class="my-2">
+                        Footer Inspection Date:
+                        {{ form.footer_inspection_date|as_crispy_field }}
+                    </div>
+                    <dix class="my-2">
+                        Footer Pour Date:
+                        {{ form.footer_pour_date|as_crispy_field }}
+                    </dix>
+                </div>
+            </div>
+            <div class="my-2">
+                {{ form.safety_stakes|as_crispy_field }}
+            </div>
+            {{ form.contracts|as_crispy_field }}
+            {{ form.images|as_crispy_field }}
+            {{ form.total_contract_amount|as_crispy_field }}
+            {{ form.payments|as_crispy_field }}
+            <div class="container mx-auto" style="width: 300px">
+                <div id="reveal-if-deposit" style="display: none;">
+                    {{ form.downpayment|as_crispy_field }}
+                </div>
+            </div>
+            {{ form.lead_status|as_crispy_field }}
+
+            <div class="submit">
+                <button type="submit" class="btn btn-outline-dark my-2">Submit</button>
+            </div> 
+        </form>
+    </div>
+</div>
+<script src="{% static 'scripts/edit_lead.js' %}" type="module"></script>
+{% endblock %}
