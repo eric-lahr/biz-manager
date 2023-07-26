@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+{% load filename %}
+{% load thumbnail %}
+{% load static %}
+
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-10 offset-md-2">
+    <div class="fluid-container">
+        <div class="row mt-4">
+            <h4>Are you sure you want to delete <a href="{{ remove.document.url }}">{{ remove.document|filename }}</a> from the system?</h4>
+        </div>
+        <div class="row mx-auto">
+            <div class="col-2">
+                <a class="btn btn-link my-2" role="button" href="{% url 'delete-contract' contpk=remove.id %}">Yes</a>
+            </div>
+            <div class="col-2">
+                <a class="btn btn-link my-2" role="button" href="javascript: history.go(-1)">No</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

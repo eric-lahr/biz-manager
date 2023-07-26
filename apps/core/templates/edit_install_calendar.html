@@ -1,0 +1,53 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/calendars.css' %}">
+{% endblock %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Edit Appointments - Installer Calendar View</u></b></h5>
+  </div>
+
+  <div class="container my-3">
+    <div class="row">
+      <div class="col-lg-3 col-md-4">
+        <div class="mb-1 mt-4 pt-4">
+          Editing:
+        </div>
+        <div class="mb-4">
+          <a href="{% url 'job-detail' pk=job.job.id %}">{{ job.job.client_id }}</a> job
+        </div>
+        <form id="install-form" action="" method="POST">
+          {% csrf_token %}
+          <div class="mb-2">
+            {{ form.installer|as_crispy_field }}
+          </div>
+          <div class="mb-2">
+            {{ form.install_schedule|as_crispy_field }}
+          </div>
+          <div class="submit">
+            <button type="submit" class="btn btn-outline-dark my-2">Update</button>
+          </div>
+        </form>    
+      </div>
+      <div class="col-lg-9 col-md-8">
+        <div class="clearfix">
+          <a class="btn btn-info left" 
+             href="{% url 'edit-install-schedule' pk=job.job.id %}?{{ prev_month }}">Previous Month
+          </a>
+          <a class="btn btn-info right" 
+             href="{% url 'edit-install-schedule' pk=job.job.id %}?{{ next_month }}">Next Month
+          </a>
+        </div>
+        {{ editcalendar }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

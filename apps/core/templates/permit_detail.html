@@ -1,0 +1,62 @@
+{% extends "base_generic.html" %}
+{% load filename %}
+{% load thumbnail %}
+{% load static %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="col-md-10 offset-md-1">
+    <div class="fluid-container">
+        <div class="user_headline mx-2 my-4">
+            <h5><b><u>View Permit</u></b></h5>
+        </div>
+        <div class="container col-10 my-5 pt-4 align-self-center">
+            <div class="row mb-1">
+                <div class="col-6">
+                    Name:
+                </div>
+                <div class="col-6">
+                    {{ permit.job.client_id }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Permits:
+                </div>
+                <div class="col-6">
+                    {{ permit.get_status_display }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Jurisdiction:
+                </div>
+                <div class="col-6">
+                    {{ permit.jurisdiction }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Permit Number:
+                </div>
+                <div class="col-6">
+                    {{ permit.permit }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Description:
+                </div>
+                <div class="col-6">
+                    {{ permit.description }}
+                </div>
+            </div>
+            <div class="row col-8 mt-3 justify-content-center">
+                <a href="javascript: history.go(-1)"><u>Return</u></a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'scripts/view_lead.js' %}" type="module"></script>
+{% endblock %}

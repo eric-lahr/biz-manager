@@ -1,0 +1,100 @@
+{% extends "base_generic.html" %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Service Archive</u></b></h5>
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p>
+        {% if hist.has_previous %}
+          <span class="userpage"><a href="?page={{ hist.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in hist.paginator.page_range %}
+          {% if hist.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if hist.has_next %}
+          <span class="userpage"><a href="?page={{ hist.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    {% if hist.object_list %}
+    <table class="table userlist">
+      <thead>
+        <tr>
+          <th>Customer Name</th><th>Address</th><th>Phone Number</th><th>Date Customer Called</th>
+          <th>Scheduled Service Date</th>
+          {%  if request.user|is_in_group:"admin" %}
+          <th>Send to Services</th>
+          {% endif %}
+          <th>View</th>
+          {%  if request.user|is_in_group:"admin" %}
+          <th>Edit</th><th>Delete</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for service in hist.object_list %}
+        <tr>
+            <td>{{ service.customer_name }}</td><td>{{ service.customer_address }}</td>
+            <td>{{ service.phone_number }}</td><td class="text-center">{{ service.cust_called }}</td>
+            <td class="text-center">{{ service.service_schedule }}</td>
+            {%  if request.user|is_in_group:"admin" %}
+            <td class="text-center"><a href="{% url 'send-to-service' servpk=service.id %}">Send</a></td>
+            {% endif %}
+            <td><a href="{% url 'service-detail' pk=service.id %}">View</a></td>
+            {%  if request.user|is_in_group:"admin" %}
+            <td><a href="{% url 'edit-service' servpk=service.id %}">Edit</a></td>
+            <td><a href="{% url 'delete-service' servpk=service.id %}">Delete</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>    
+    </table>
+
+    {% else %}
+      <p>There are no service calls in the archive.</p>
+    {% endif %}
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p>
+        {% if hist.has_previous %}
+          <span class="userpage"><a href="?page={{ hist.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in hist.paginator.page_range %}
+          {% if hist.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if hist.has_next %}
+          <span class="userpage"><a href="?page={{ hist.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

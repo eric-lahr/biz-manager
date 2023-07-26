@@ -1,0 +1,103 @@
+{% extends "base_generic.html" %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="col-md-11">
+    <div class="container-fluid ml-2" id="user_list"> 
+      <div class="user_headline mx-2 my-4">
+        <h5><b><u>User List</u></b></h5>
+      </div>
+      <div class="mx-2">
+        <a href="{% url 'new-user' %}"><u>New User</u></a>
+      </div>
+
+      <div class="pagination d-flex flex-row-reverse">
+        <div class="p-3">
+          <p>
+            {% if usr.has_previous %}
+              <span class="userpage"><a href="?page={{ usr.previous_page_number }}">Previous</a></span>
+            {% else %}
+              <span class="userpage off">Previous</span>
+            {% endif %}
+            {% for pg in usr.paginator.page_range %}
+              {% if usr.number == pg %}
+                <span class="userpage active">{{ pg }}</span>
+              {% else %}
+                <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+              {% endif %}
+            {% endfor %}
+            {% if usr.has_next %}
+              <span class="userpage"><a href="?page={{ usr.next_page_number }}">Next</a></span>
+            {% else %}
+              <span class="userpage off">Next</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <div>
+        {% if usr.object_list %}
+        <table class="table userlist">
+          <thead>
+            <tr>
+              <th>First Name</th><th>Last Name</th><th>User Name</th><th>Email Address</th>
+              <th>User Type</th>
+              {% if request.user|is_in_group:"admin" %}
+              <th>Edit</th><th>Delete</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for person in usr.object_list %}
+            <tr {% if not person.is_active  %}class="inactive"{% endif %}>
+                <td>{{ person.first_name }}</td><td>{{ person.last_name }}</td><td>{{ person.username }}</td>
+                <td>{{ person.email }}</td>
+                <td>
+                  {% for group in person.groups.all %}
+                    {{ group }}
+                  {% endfor %}
+                </td>
+                {% if request.user|is_in_group:"admin" %}
+                <td><a href="{% url 'edit-user' userpk=person.id %}">Edit</a></td>
+                <td><a href="{% url 'delete-user' userpk=person.id %}">Delete</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>    
+        </table>
+
+        {% else %}
+          <p>There are no users.</p>
+        {% endif %}
+      </div>
+
+      <div class="pagination d-flex flex-row-reverse">
+        <div class="p-3">
+          <p>
+            {% if usr.has_previous %}
+              <span class="userpage"><a href="?page={{ usr.previous_page_number }}">Previous</a></span>
+            {% else %}
+              <span class="userpage off">Previous</span>
+            {% endif %}
+            {% for pg in usr.paginator.page_range %}
+              {% if usr.number == pg %}
+                <span class="userpage active">{{ pg }}</span>
+              {% else %}
+                <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+              {% endif %}
+            {% endfor %}
+            {% if usr.has_next %}
+              <span class="userpage"><a href="?page={{ usr.next_page_number }}">Next</a></span>
+            {% else %}
+              <span class="userpage off">Next</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

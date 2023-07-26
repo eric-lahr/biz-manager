@@ -1,0 +1,116 @@
+{% extends 'base_generic.html' %}
+{% load crispy_forms_tags %}
+
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="row mt-4 ">
+                    <h5><u>Dashboard</u></h5>
+                </div>
+                <div class="row">
+                    <div class="dashboard mx-auto">
+                        <textarea name="board" cols="120" rows="14" spellcheck="false">
+                        {% if dash %}
+                            {% for line in dash %}
+                {{ line.datetime|date:"m.d.Y, g:ia" }}  {{ line.user_id }} -  {{ line.text }}
+                            {% empty %}
+                            There are no messages.
+                            {% endfor %}
+                        {% endif %}
+                        </textarea>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 dbform my-2">
+                        <form method="post" >
+                            <div class="row justify-content-center">
+                                {% csrf_token %}
+                                {{ dash_form }}
+                            </div>
+                            <div class="submit">
+                                <button name="dash" type="submit" class="btn btn-outline-dark my-2">Submit</button>
+                            </div>            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="dropdown">
+                    <div class="trigger my-4">Show Activity Log</div>
+                    <div class="content">
+                        <table class="table entrylogs">
+                            <tbody>
+                                {% for item in events %}
+                                <tr>
+                                    <td>
+                                        {{ item.entry_date|date:'m/j/y g:i a' }}
+                                    </td>
+                                    <td>
+                                        {{ item.action }}
+                                    </td>
+                                    <td>
+                                        {% if item.lead %}
+                                        <a href={{ item.lead.get_appointment_url }}>View</a>
+                                        {% endif %}
+                                        {% if item.service %}
+                                        <a href={{ item.service.get_absolute_url }}>View</a>
+                                        {% endif %}
+                                        {% if item.payroll %}
+                                        <a href={{ item.payroll.get_absolute_url }}>View</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid search-container">
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-8">
+                <div class="row mx-auto">
+                    <h5><u>Customer Search</u></h5>
+                </div>
+                <div class="row mx-auto">
+                    Input the name, phone number, or address to retrieve customer information
+                </div>
+                <div class="search-form px-4 ml-4 mt-4">
+                    <form class="jobsearch" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        {{ search_form.first_name|as_crispy_field }}
+                        {{ search_form.last_name|as_crispy_field }}
+                        {{ search_form.address|as_crispy_field }}
+                        {{ search_form.city|as_crispy_field }}
+                        {{ search_form.state|as_crispy_field }}
+                        {{ search_form.phone_number|as_crispy_field }}
+                        {{ search_form.cross_streets|as_crispy_field }}
+                        {{ search_form.project_notes|as_crispy_field }}
+                        <div class="my-1">
+                            {{ search_form.project_type|as_crispy_field }}
+                        </div>
+                        <div>
+                            {{ search_form.salesperson|as_crispy_field }}
+                        </div>
+                        <div class="submit">
+                            <button name="search" type="submit" class="btn btn-outline-dark my-2">Retrieve Information</button>
+                        </div>             
+                    </form>
+                </div>        
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

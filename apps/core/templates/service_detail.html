@@ -1,0 +1,77 @@
+{% extends "base_generic.html" %}
+{% load filename %}
+{% load thumbnail %}
+{% load static %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="col-md-10 offset-md-1">
+    <div class="fluid-container">
+        <div class="user_headline mx-2 my-4">
+            <h5><b><u>View Service Call</u></b></h5>
+        </div>
+        <div class="container col-10 my-5 pt-4 align-self-center">
+            <div class="row mb-1">
+                <div class="col-6">
+                    Customer Name:
+                </div>
+                <div class="col-6">
+                    {{ services.customer_name }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Customer Address:
+                </div>
+                <div class="col-6">
+                    {{ services.customer_address }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Date Customer Called:
+                </div>
+                <div class="col-6">
+                    {{ services.cust_called }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Date Service Scheduled:
+                </div>
+                <div class="col-6">
+                    {{ services.service_schedule }}
+                </div>
+            </div>
+            <div class="row my-3">
+                <div class="col-6">
+                    Description of Problem:
+                </div>
+                <div class="col-6">
+                    {{ services.description }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Phone Number:
+                </div>
+                <div class="col-6">
+                    {{ services.phone_number }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Installer:
+                </div>
+                <div class="col-6">
+                    {{ services.installer }}
+                </div>
+            </div>
+            <div class="row col-8 mt-3 justify-content-center">
+                <a href="javascript: history.go(-1)"><u>Return</u></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

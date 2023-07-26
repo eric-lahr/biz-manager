@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+{% load thumbnail %}
+{% load static %}
+
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-10 offset-md-2">
+    <div class="fluid-container">
+        <div class="row mt-4">
+            <h4>Are you sure you want to delete this photo from the system?</h4>
+        </div>
+        <div class="row mx-auto my-4">
+            {% thumbnail remove.photos "320x300" crop="center" as im %}
+                <a href="{{ remove.photos.url }}"><img src="{{ im.url }}" height="{{ im.height }}" width="{{ im.width }}"></a>
+            {% endthumbnail %}
+        </div>
+        <div class="row mx-auto">
+            <div class="col-2">
+                <a class="btn btn-link my-2" role="button" href="{% url 'delete-photo' photopk=remove.id %}">Yes</a>
+            </div>
+            <div class="col-2">
+                <a class="btn btn-link my-2" role="button" href="javascript: history.go(-1)">No</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

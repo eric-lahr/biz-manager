@@ -1,0 +1,693 @@
+/* "reset" project */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1;
+    color: black;
+}
+
+/* printables */
+
+@media print and (max-width:8.5in) {
+    body * {
+      visibility: hidden;
+    }
+    #section-to-print, #section-to-print * {
+      visibility: visible;
+    }
+    #section-to-print {
+      position: fixed !important;
+      overflow: visible;
+      left: 0;
+      top: 0;
+    }
+  }
+
+/* base-generic */
+
+.header {
+    height: 18vh;
+    background-image: url("/static/images/header.jpg");
+    background-size: cover;
+}
+
+.sidebar-nav {
+    padding: 0;
+    list-style: none;
+}
+
+.base {
+    border-top: 6px solid #ffcc00;
+    border-bottom: 6px solid #ffcc00;
+}
+
+/* #top, #bottom, */#left, #right {
+	background: #ffcc00;
+	position: fixed;
+	}
+	#left, #right {
+		top: 0; bottom: 0;
+		width: 6px;
+		}
+		#left { left: 0; }
+		#right { right: 0; }
+
+button.btn.btn-link, .btn.btn-link {
+    color: black;
+    background-color: #ffcc00;
+    margin-bottom: 3px;
+    width: 120%;
+    font-size: 0.8em;
+}
+
+button.btn.btn-link:hover, .btn.btn-link:hover {
+    background-color: #ffde00;
+    text-decoration: none;
+}
+
+button.btn.btn-link.payroll,
+a.btn.btn-link.payroll {
+    background-color: #6C0;
+}
+
+button.btn.btn-link.payroll:hover,
+a.btn.btn-link.payroll:hover {
+    background-color: #6F6;
+}
+
+/* Confirmation Boxes */
+
+#are-you-sure {
+    border: black 1px solid;
+    padding: 2rem;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* index */
+
+textarea {
+    -webkit-writing-mode: horizontal-tb !important;
+    writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    color: -internal-light-dark-color(black, white);
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    -webkit-appearance: textarea;
+    background-color: -internal-light-dark-color(white, black);
+    -webkit-rtl-ordering: logical;
+    flex-direction: column;
+    resize: auto;
+    cursor: text;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    margin: 0em;
+    font: 400 11px system-ui;
+    border-width: 1px;
+    border-style: solid;
+    border-color: initial;
+    border-image: initial;
+    padding: 2px;
+    line-height: 1 !important;
+}
+
+/* index textarea input */
+
+:required {
+    width: 56em;
+    height: 6em;
+}
+
+div.submit {
+    display: flex;
+    justify-content: center;
+}
+
+/* index activity log dropdown */
+
+.dropdown .trigger {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdown .trigger::after {
+    content: ">";
+    display: inline-block;
+    position: absolute;
+    right: 15px;
+    -webkit-transform: rotate(90deg) scale(0.5, 1);
+    transform: rotate(90deg) scale(0.5, 1);
+    font-weight: bold;
+    transition: transform 0.3s;
+}
+
+.dropdown .trigger.active::after {
+    -webkit-transform: rotate(-90deg), scale(0.5, 1);
+    transform: rotate(-90deg), scale(0.5, 1);
+}
+
+.dropdown .content {
+    display: none;
+}
+
+.dropdown .content.active {
+    display: block
+}
+
+/* home search form */
+
+form.jobsearch input,
+form.jobsearch select {
+    width: 20em;
+    height: 1.5em;
+}
+
+select#search-type {
+    height: auto;
+}
+
+div.search-form label {
+    line-height: 1 !important;
+}
+
+/* password reset forms */
+
+#id_username, #id_password, #id_email,
+#id_new_password1, #id_new_password2,
+#id_confirm {
+    width: 20em;
+    height: auto;
+    margin-top: 6px;
+    padding: .375rem .75rem;
+}
+
+/* user list page */
+
+div#user_list {
+    padding: 0px;
+}
+
+table.search-results tbody tr,
+table.userlist tbody tr,
+table.leadsrun tbody tr,
+table.jobsinprogress tbody tr,
+table.appointments tbody tr {
+    border-bottom: 4px solid black !important;
+    padding: 8px;
+}
+.userlist th, .leadsrun th, .jobsinprogress th {
+    background-color: #ffcc00;
+}
+
+.userlist tr.inactive {
+    color: lightgray;
+}
+
+span.userpage, span.userpage a:link {
+    font-size: 15px;
+    padding: 2px;
+}
+
+span.userpage {
+    border: 1px solid black;
+}
+
+span.userpage:hover {
+    border: 2px solid black;
+}
+
+span.userpage a:link:hover {
+    text-decoration: none;
+}
+
+span.userpage.active {
+    color: white;
+    background-color: black;
+}
+
+span.userpage.off {
+    color: gray;
+    border: 1px solid gray;
+    opacity: .8;  
+}
+
+select#id_project_category {
+    width: 30em;
+    height: auto;
+}
+
+select#id_salesperson,
+select#id_installer {
+    width: 20em;
+    height: auto;
+}
+
+select#id_found_us {
+    width: 20em;
+    height: auto;
+}
+
+input#id_contracts, input#id_images, input#id_date {
+    border: none;
+}
+
+input#id_date {
+    width: 12em;
+    height: auto;
+    margin-left: 7em;
+}
+
+/* appointments */
+
+div.pagination.d-flex {
+    width: 100%;
+}
+
+.appointments th,
+.search-results th {
+    background-color: #ffcc00;
+    color: white;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+table.table.appointments {
+    font-size: smaller;
+}
+
+div.modal-header,
+div.modal-footer {
+    background-color: #ffcc00;
+    color: black;
+}
+
+/* leads run and jip tables */
+
+table.table.leadsrun,
+table.table.jobsinprogress {
+    font-size: small;
+    max-width: 100%;
+}
+
+table.table.leadsrun tr.hot,
+table.table.jobsinprogress tr.hot {
+    color: #EB7C0E;
+}
+
+table.table.leadsrun tr.cold,
+table.table.jobsinprogress tr.cold {
+    color: #0000FF;
+}
+
+table.table.leadsrun tr#priority,
+table.table.jobsinprogress tr#priority {
+    color: #FF0000;
+}
+
+table.table.leadsrun tr#priority td,
+table.table.jobsinprogress tr#priority td {
+    position: relative;
+}
+
+.CellComment {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    z-index: 100;
+    border: 1px;
+    background-color: lightskyblue;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 20px;
+    padding: 3px;
+    color: black;
+    white-space: pre-wrap;
+    top: 20px;
+    left: 20px;
+    width: 30em;
+    height: auto;
+ /*   min-height: 20em; */
+    -webkit-transition: opacity 600ms, visibility 600ms;
+    transition: opacity 600ms, visibility 600ms;
+}
+
+table.table.leadsrun tr#priority td:hover span.CellComment,
+table.table.jobsinprogress tr#priority td:hover span.CellComment {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+
+div#sort {
+    max-height: 55px;
+}
+
+select#id_sort_by {
+    width: 14em !important;
+    font-size: small;
+    height: auto;
+}
+
+select#id_sort_by option {
+    width: 14em;
+}
+
+select#id_order {
+    font-size: small;
+    height: auto;
+}
+
+button#sortbtn {
+    height: 30px !important;
+    font-size: small !important;
+    line-height: 12px !important;
+    margin-bottom: 8px !important;
+}
+
+div.p-3, p#leadsort {
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+div#leadsrun_pagination.pagination.d-flex {
+    width: 100%;
+}
+
+.userlist th, .leadsrun th, .jobsinprogress th {
+    color: white;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+/* new lead */
+
+input#id_sales_date,
+input#id_install_schedule {
+    width: 20em;
+    height: auto;
+}
+
+input#id_date_appointment_run {
+    width: 12em;
+    height: auto;
+}
+
+select#id_project_type {
+    width: 20em;
+    height: 25em;
+}
+
+div.offset-lg-3.col-lg-7 {
+    padding-left: 0px;
+}
+
+label[for=id_date_appointment_run] {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+input#id_date_appointment_run.dateinput.form-control {
+    padding-right: 0px;
+    margin: 0px;
+}
+
+div#date-appointment-run {
+    padding-right: 2em;
+    padding-left: 13px;
+}
+
+div#div_id_contracts.form-group.row {
+    height: 50px;
+}
+
+div#div_id_images.form-group.row {
+    height: 50px;
+}
+
+
+input#id_contracts.clearablefileinput {
+    height: 50px;
+}
+
+input#id_total_contract_amount {
+    width: 20em;
+}
+
+.reveal-if-active {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transform: scale(0.8);
+    transition: 0.5s;
+    input[type="checkbox"]:checked ~ & {
+      opacity: 1;
+      max-height: 250px;
+      overflow: visible;
+      padding: 10px 20px;
+      transform: scale(1);
+    }
+  }
+
+input[type="checkbox"]:checked ~ .reveal-if-active {
+      opacity: 1;
+      max-height: 250px; /* little bit of a magic number :( */
+      overflow: visible;
+}
+
+/* new lead */
+
+input#id_footer_dig_date,
+input#id_footer_pour_date,
+input#id_footer_inspection_date {
+    width: 12em;
+    height: auto;
+}
+
+input#appointment_date {
+    width: 11em;
+    height: auto;
+    padding-right: 0!important;
+    margin-left: 5em;
+    float: right;
+}
+
+div#div_id_time_ap {
+    float: right;
+}
+
+label.col-form-label.col-lg-3 {
+    white-space: nowrap;
+}
+
+select#id_jurisdiction,
+input#id_schedule_date {
+    width: 20em;
+    height: 2em;
+}
+
+/* new service */
+
+input#id_cust_called,
+input#id_service_sched {
+    width: 20em;
+    height: 2em;
+}
+
+/* submit payroll */
+
+div.pay-head {
+    background-color: #66cc00;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+}
+
+div.employee-list {
+    padding-left: 20px;
+}
+
+a#newpay {
+    background-color: rgb(239, 239, 239);
+}
+
+/* installer form */
+
+input#id_job_name,
+input#id_job_address,
+input#id_helper_name,
+input#id_amount_owed {
+    width: 20em;
+    height: auto;
+    margin-top: 6px;
+    padding: .375rem .75rem;
+}
+
+input#id_date_completed {
+    width: 20em;
+    height: auto;
+}
+
+input#id_job_file {
+    border: 0;
+}
+
+/* staff form */
+
+table.staff-form, tr, td, th {
+    border: none !important;
+}
+
+table.staff-pay, table {
+    border-spacing: 3rem;
+}
+
+table.staff-pay th {
+    padding-bottom: 1rem;
+}
+
+div.staff-header,
+div.dow,
+div.staff-sub-header,
+div.dow-date {
+    padding: 0px;
+    margin: 0px;
+}
+
+div.dow {
+    margin-right: 2rem;
+}
+
+tr.space {
+    height: 1rem;
+}
+
+input#id_monday_date,
+input#id_tuesday_date,
+input#id_wednesday_date,
+input#id_thursday_date,
+input#id_friday_date,
+input#id_saturday_date,
+input#id_sunday_date {
+    float: none;
+    position: relative;
+    padding-left: 1rem;
+    padding-right: 0rem;
+    width: 11em;
+    height: auto;
+}
+
+input#id_monday_tot,
+input#id_tuesday_tot,
+input#id_wednesday_tot,
+input#id_thursday_tot,
+input#id_friday_tot,
+input#id_saturday_tot,
+input#id_sunday_tot,
+input#id_weekly_hours {
+    width: 8em;
+    height: auto;
+}
+
+input#id_hourly_rate,
+input#id_week_start_date {
+    width: 12em;
+    height: auto;
+}
+
+input#id_monday_in_hr, input#id_monday_in_min,
+input#id_monday_out_hr, input#id_monday_out_min,
+input#id_tuesday_out_hr, input#id_tuesday_out_min,
+input#id_tuesday_in_hr, input#id_tuesday_in_min,
+input#id_wednesday_in_hr, input#id_wednesday_in_min,
+input#id_wednesday_out_hr, input#id_wednesday_out_min,
+input#id_thursday_out_hr, input#id_thursday_out_min,
+input#id_thursday_in_hr, input#id_thursday_in_min,
+input#id_friday_in_hr, input#id_friday_in_min,
+input#id_friday_out_hr, input#id_friday_out_min,
+input#id_saturday_out_hr, input#id_saturday_out_min,
+input#id_saturday_in_hr, input#id_saturday_in_min,
+input#id_sunday_in_hr, input#id_sunday_in_min,
+input#id_sunday_out_hr, input#id_sunday_out_min {
+    width: 8em;
+    height: auto;
+}
+
+input#id_upload_file {
+    border: 0;
+}
+
+input#salesperson-pay {
+    padding-left: 3px;
+}
+
+/* my payroll */
+
+table.employee-docs {
+    display: block;
+}
+
+table.employee-docs td.document-list {
+    display: inline-block;
+}
+
+div.payroll-block {
+    background-color: black;
+    color: white;
+    width: 100%;
+    text-align: center;
+    padding: 6px;
+}
+
+a#add-payroll {
+    background-color: rgb(239, 239, 239);
+    border: solid black 1px;
+    width: 8em;
+    height: 2em;
+}
+
+div#payroll-container.container {
+    width: 80%;
+}
+
+table.table.mypayroll th {
+    background-color: #66cc00;
+    color: white;
+}
+
+table.table.mypayroll tbody tr {
+    border-bottom: 4px solid black !important;
+    padding: 8px;
+}
+
+/* submit salesperson pay */
+
+input#salesperson-pay,
+input#date-added-sales-pay {
+    height: auto;
+    width: 12em;
+}
+
+.form-group input {
+    height: auto;
+}
+
+.form-group {
+    margin-bottom: 0em !important;
+}

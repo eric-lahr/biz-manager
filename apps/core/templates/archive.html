@@ -1,0 +1,129 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Archives</u></b></h5>
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p id="leadsort">
+        {% if job_archive.has_previous %}
+          <span class="userpage"><a href="?page={{ job_archive.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in job_archive.paginator.page_range %}
+          {% if job_archive.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if job_archive.has_next %}
+          <span class="userpage"><a href="?page={{ job_archive.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="col-lg-7" id="sort">
+    <form class="sortlead" method="post">
+      {% csrf_token %}
+      <div class="form-row" id="sort-form-row">
+        <div class="form-group col-lg-6 my-4">
+          {{ form.sort_by|as_crispy_field }}
+        </div>
+        <div class="form-group col-lg-3 my-4">
+          {{ form.order|as_crispy_field }}
+        </div>
+        
+        <div class="submit form-group col-lg-3">
+          <button type="submit" class="btn btn-outline-dark my-4" id="sortbtn">Show</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="container">
+    {% if job_archive.object_list %}
+    <table class="table jobsinprogress">
+      <thead>
+        <tr>
+          <th>Customer Name</th><th>Address</th><th>City</th><th>Nearest Cross Street</th>
+          <th>Job Type</th><th>Date Order Complete</th>
+          {%  if request.user|is_in_group:"admin" %}
+          <th>Send Order to Accounts Receivable</th>
+          {% endif %}
+          <th>View</th>
+          {%  if request.user|is_in_group:"admin" %}
+          <th>Edit</th><th>Delete</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for account in job_archive.object_list %}
+        <tr>
+            <td>{{ account.client_id }}</td>
+            <td>{{ account.client_id.address }} {% if account.client_id.address1 %} 
+                {{ account.client_id.address1 }} {% endif %}
+            </td>
+            <td>{{ account.client_id.city }}</td>
+            <td>{{ account.client_id.nmc_street}}</td>
+            <td>{% for pt in account.project_type.all %} {{ pt }}
+              {% if not forloop.last %}, {% endif %} {% endfor %}
+            </td>
+            <td class="text-center">{{ account.jobstatus.completion_date }}</td>
+            {%  if request.user|is_in_group:"admin" %}
+            <td class="text-center"><a id="send-confirmation"
+                                      href="{% url 'send-to-receivable' leadpk=account.id %}">Send</a></td>
+            {% endif %}
+            <td><a href="{% url 'archive-detail' pk=account.id %}">View</a></td>
+            {%  if request.user|is_in_group:"admin" %}
+            <td><a href="{% url 'edit-archive' leadpk=account.id %}">Edit</a></td>
+            <td><a href="{% url 'delete-job' leadpk=account.id %}">Delete</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>    
+    </table>
+
+    {% else %}
+      <p>There are no jobs in the archive.</p>
+    {% endif %}
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p id="leadsort">
+        {% if accounts_receivable.has_previous %}
+          <span class="userpage"><a href="?page={{ accounts_receivable.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in accounts_receivable.paginator.page_range %}
+          {% if accounts_receivable.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if accounts_receivable.has_next %}
+          <span class="userpage"><a href="?page={{ accounts_receivable.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+<script src="{% static 'scripts/receive.js' %}" type="module"></script>
+{% endblock %}

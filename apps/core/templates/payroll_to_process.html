@@ -1,0 +1,132 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% load filename %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container" id="payroll-container">
+  <div class="row text-align-left">
+    <div class="user_headline mx-2 my-4">
+      <h5><b><u>Current Payroll (to be processed)</u></b></h5>
+    </div>
+  </div>
+  <div class="row">
+    <div class="pagination d-flex flex-row-reverse" id="leadsrun_pagination">
+      <div class="p-3">
+        <p id="leadsort">
+          {% if pay.has_previous %}
+            <span class="userpage"><a href="?page={{ pay.previous_page_number }}">Previous</a></span>
+          {% else %}
+            <span class="userpage off">Previous</span>
+          {% endif %}
+          {% for pg in pay.paginator.page_range %}
+            {% if pay.number == pg %}
+              <span class="userpage active">{{ pg }}</span>
+            {% else %}
+              <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+            {% endif %}
+          {% endfor %}
+          {% if pay.has_next %}
+            <span class="userpage"><a href="?page={{ pay.next_page_number }}">Next</a></span>
+          {% else %}
+            <span class="userpage off">Next</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row text-align-left" id="sort">
+    <div class="container ml-2">
+      <form class="sortlead" method="post">
+        {% csrf_token %}
+        <div class="form-row my-4" id="sort-form-row">
+          <div class="d-inline-flex p-1">
+            <div class="form-group">
+              {{ form.sort_by|as_crispy_field }}
+            </div>
+          </div>
+          <div class="d-inline-flex p-1">
+            <div class="form-group">
+              {{ form.order|as_crispy_field }}
+            </div>
+          </div>
+          <div class="d-inline-flex p-1">
+            <div class="submit form-group">
+              <button type="submit" class="btn btn-outline-dark" id="sortbtn">Show</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="container ml-2 mt-2">
+      {% if pay.object_list %}
+      <table class="table mypayroll" style="width:100%">
+        <thead>
+          <tr>
+            <th>Payroll ID</th><th>User Name</th><th>User Type</th>
+            <th style="text-align: center;">Edit</th><th style="text-align: center;">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in pay.object_list %}
+          <tr>
+            <td>
+              {{ item.payroll_id }}
+            </td>
+            <td>
+              {{ item.user.first_name }} {{ item.user.last_name }}
+            </td>
+            <td>
+              {% for group in item.user.groups.all %}
+                {{ group }}
+              {% endfor %}
+            </td>
+            <td style="text-align: center;">
+              <a href="{% url 'edit-process-payroll' paypk=item.id %}">Edit</a>
+            </td>
+            <td style="text-align: center;">
+              <a href="{% url 'delete-payroll' paypk=item.id %}">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>    
+      </table>
+      {% else %}
+        <p>There are no payroll items.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="pagination d-flex flex-row-reverse mb-4">
+      <div class="p-3">
+        <p id="leadsort">
+          {% if pay.has_previous %}
+            <span class="userpage"><a href="?page={{ pay.previous_page_number }}">Previous</a></span>
+          {% else %}
+            <span class="userpage off">Previous</span>
+          {% endif %}
+          {% for pg in pay.paginator.page_range %}
+            {% if pay.number == pg %}
+              <span class="userpage active">{{ pg }}</span>
+            {% else %}
+              <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+            {% endif %}
+          {% endfor %}
+          {% if pay.has_next %}
+            <span class="userpage"><a href="?page={{ pay.next_page_number }}">Next</a></span>
+          {% else %}
+            <span class="userpage off">Next</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base_generic.html" %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="col-md-10 offset-md-1">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Appointments</u></b></h5>
+  </div>
+  <div class="mx-2">
+    <a href="{% url 'new-appointment' %}"><u>Add New Appointment</u></a>
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p>
+        {% if apt.has_previous %}
+          <span class="userpage"><a href="?page={{ apt.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in apt.paginator.page_range %}
+          {% if apt.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if apt.has_next %}
+          <span class="userpage"><a href="?page={{ apt.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    {% if apt.object_list %}
+    <table class="table appointments">
+      <thead>
+        <tr class="text-center" id="appt_head">
+          <th>Customer Name</th><th>Address</th><th>Date & Time of Appointment</th>
+          <th>Salesperson</th>
+          {% if request.user|is_in_group:"admin" %}
+          <th>Send to Leads Run</th>
+          {% endif %}
+          <th>View</th>
+          {%  if request.user|is_in_group:"admin" %}
+          <th>Edit</th>
+          <th>Delete</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for appt in apt.object_list %}
+        <tr>
+            <td>{{ appt.client_id.name }} {{ appt.client_id.last_name}}</td>
+            <td>{{ appt.client_id.address }} {% if appt.client_id.address1 %} 
+                {{ appt.client_id.address1 }} {% endif %}</td>
+            <td>{% if appt.appointment_date %}
+                  {{ appt.appointment_date }} {{ appt.appointment_time }}
+                {% endif %}
+            </td>
+            <td>{% if appt.salesperson %}{{ appt.salesperson }}{% endif %}</td>
+            {%  if request.user|is_in_group:"admin" %}
+            <td class="text-center"><a id="send-confirmation"
+                                       href="{% url 'send-to-leads-run' leadpk=appt.id %}">Send</a></td>
+            {% endif %}
+            <td><a href="{% url 'appointment-detail' pk=appt.id %}">View</a></td>
+            {%  if request.user|is_in_group:"admin" %}
+            <td><a href="{% url 'edit-appointment' leadpk=appt.id %}">Edit</a></td>
+            <td><a href="{% url 'delete-appointment' leadpk=appt.id %}">Delete</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>    
+    </table>
+
+    {% else %}
+      <p>There are no appointments.</p>
+    {% endif %}
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p>
+        {% if apt.has_previous %}
+          <span class="userpage"><a href="?page={{ apt.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in apt.paginator.page_range %}
+          {% if apt.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if apt.has_next %}
+          <span class="userpage"><a href="?page={{ apt.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

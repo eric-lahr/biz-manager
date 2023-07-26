@@ -1,0 +1,157 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container" id="leads-run-container">
+    <div class="user_headline mx-2 my-4">
+      <h5><b><u>Leads</u></b></h5>
+    </div>
+    <div class="mx-2">
+      {% if request.user|is_in_group:"admin" %}
+      <a href="{% url 'new-lead' %}"><u>Add a Lead</u></a>
+      {% endif %}
+    </div>
+
+    <div class="pagination d-flex flex-row-reverse" id="leadsrun_pagination">
+      <div class="p-3">
+        <p id="leadsort">
+          {% if lead.has_previous %}
+            <span class="userpage"><a href="?page={{ lead.previous_page_number }}">Previous</a></span>
+          {% else %}
+            <span class="userpage off">Previous</span>
+          {% endif %}
+          {% for pg in lead.paginator.page_range %}
+            {% if lead.number == pg %}
+              <span class="userpage active">{{ pg }}</span>
+            {% else %}
+              <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+            {% endif %}
+          {% endfor %}
+          {% if lead.has_next %}
+            <span class="userpage"><a href="?page={{ lead.next_page_number }}">Next</a></span>
+          {% else %}
+            <span class="userpage off">Next</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="col-lg-7" id="sort">
+      <form class="sortlead" method="post">
+        {% csrf_token %}
+        <div class="form-row" id="sort-form-row">
+          <div class="form-group col-lg-6 my-4">
+            {{ form.sort_by|as_crispy_field }}
+          </div>
+          <div class="form-group col-lg-3 my-4">
+            {{ form.order|as_crispy_field }}
+          </div>
+          
+          <div class="submit form-group col-lg-3">
+            <button type="submit" class="btn btn-outline-dark my-4" id="sortbtn">Show</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="container ml-2 mt-2">
+      {% if lead.object_list %}
+      <table class="table leadsrun" style="width:100%">
+        <thead>
+          <tr>
+            <th>Customer Name</th><th>Address</th><th>City</th><th>Date Appointment Ran</th>
+            <th>Time</th><th>Nearest Cross Street</th><th>Job Type</th><th>Salesperson</th>
+            {%  if request.user|is_in_group:"admin" %}
+            <th>Send Order to Jobs in Progress</th>
+            {% endif %}
+            <th>Send to Standard View</th><th>View</th>
+            {%  if request.user|is_in_group:"admin" %}
+            <th>Edit</th><th>Delete</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for ran in lead.object_list %}
+          <tr {% if ran.lead_cur_status == "CD" %} class="cold"
+              {% elif ran.lead_cur_status == "HT" %} class="hot" {% endif %}
+              {% if ran.priority %} id="priority" {% endif %}>
+              <td style="width: 12%;">{{ ran.client_id.name }} {{ ran.client_id.last_name}}
+                {% if ran.priority %} <span class="CellComment">{{ ran.priority_msg }}</span>{% endif %}
+              </td>
+              <td style="width: 12%;">{{ ran.client_id.address }} {% if ran.client_id.address1 %}
+                  {{ ran.client_id.address1 }} {% endif %}
+                  {% if ran.priority %} <span class="CellComment">{{ ran.priority_msg }}</span>{% endif %}
+              </td>
+              <td style="width:5%;">{{ ran.client_id.city }}
+                {% if ran.priority %} <span class="CellComment">{{ ran.priority_msg }}</span>{% endif %}
+              </td>
+              <td style="width: 10%;">{{ ran.appointment_date }}
+                {% if ran.priority %} <span class="CellComment">{{ ran.priority_msg }}</span>{% endif %}
+              </td>
+              <td style="width: 5%;">{{ ran.appointment_time }}
+                {% if ran.priority %} <span class="CellComment">{{ ran.priority_msg }}</span>{% endif %}
+              </td>
+              <td style="width: 8%;">{{ ran.client_id.nmc_street }}
+                {% if ran.priority %} <span class="CellComment">{{ ran.priority_msg }}</span>{% endif %}
+              </td>
+              <td style="width: 8%;">{% for pt in ran.project_type.all %}{{ pt }}{% if not forloop.last %}, {% endif %}
+                                     {% endfor %}
+                {% if ran.priority %} <span class="CellComment">{{ ran.priority_msg }}</span>{% endif %}
+              </td>
+              <td class="text-center" style="width: 10%;">{{ ran.salesperson }}
+                {% if ran.priority %} <span class="CellComment">{{ ran.priority_msg }}</span>{% endif %}
+              </td>
+              {%  if request.user|is_in_group:"admin" %}
+              <td class="text-center" style="width: 6%;"><a id="send-confirmation"
+                                                            class="sendconf"
+                                                            href="{% url 'send-to-jip' leadpk=ran.id %}">Send</a>
+              </td>
+              {% endif %}
+              <td class="text-center" style="width: 6%;"><a id="standard-confirmation"
+                                                            href="{% url 'send-to-standard' leadpk=ran.id %}">Send</a>
+              </td>
+              <td style="width: 6%;"><a href="{% url 'lead-detail' pk=ran.id %}">View</a></td>
+              {%  if request.user|is_in_group:"admin" %}
+              <td style="width: 6%;"><a href="{% url 'edit-lead' leadpk=ran.id %}">Edit</a></td>
+              <td style="width: 6%;"><a href="{% url 'delete-lead' leadpk=ran.id %}">Delete</a></td>
+              {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>    
+      </table>
+
+      {% else %}
+        <p>There are no leads.</p>
+      {% endif %}
+
+    </div>
+
+    <div class="pagination d-flex flex-row-reverse mb-4">
+      <div class="p-3">
+        <p id="leadsort">
+          {% if lead.has_previous %}
+            <span class="userpage"><a href="?page={{ lead.previous_page_number }}">Previous</a></span>
+          {% else %}
+            <span class="userpage off">Previous</span>
+          {% endif %}
+          {% for pg in lead.paginator.page_range %}
+            {% if lead.number == pg %}
+              <span class="userpage active">{{ pg }}</span>
+            {% else %}
+              <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+            {% endif %}
+          {% endfor %}
+          {% if lead.has_next %}
+            <span class="userpage"><a href="?page={{ lead.next_page_number }}">Next</a></span>
+          {% else %}
+            <span class="userpage off">Next</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+</div>
+{% endblock %}

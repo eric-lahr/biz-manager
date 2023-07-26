@@ -1,0 +1,49 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-10 ml-2">
+  <div class="container-fluid">
+    <div class="row my-3"><u>Edit Appointment</u></div>
+    <form class="edituser" method="post">
+        {% csrf_token %}
+        {{ form.name|as_crispy_field }}
+        {{ form.last_name|as_crispy_field }}
+        {{ form.address|as_crispy_field }}
+        {{ form.address1|as_crispy_field }}
+        {{ form.city|as_crispy_field }}
+        {{ form.state|as_crispy_field }}
+        {{ form.zip_code|as_crispy_field }}
+        {{ form.gate_code|as_crispy_field }}
+        {{ form.nmc_street|as_crispy_field }}
+        <div class="mb-2">
+          {{ form.home_phone|as_crispy_field }}
+        </div>
+        <div class="mb-2">
+          {{ form.cell_phone|as_crispy_field }}
+        </div>
+        {{ form.email|as_crispy_field }}
+        {{ form.detailed_instr|as_crispy_field }}
+        {{ form.contracts|as_crispy_field }}
+        {{ form.images|as_crispy_field }}
+        {{ form.salesperson|as_crispy_field }}
+        <div class="form-row">
+            {{ form.date|as_crispy_field }}
+            <div class="mx-1">
+              {{ form.time|as_crispy_field }}
+            </div>
+            {{ form.time_ap|as_crispy_field }}
+        </div>
+        {{ form.found_us|as_crispy_field }}
+
+        <div class="submit">
+            <button type="submit" class="btn btn-outline-dark my-2">Submit</button>
+        </div>
+      </form> 
+    </div>
+</div>
+{% endblock %}

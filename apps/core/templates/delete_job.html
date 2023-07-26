@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="col-md-9 offset-md-1">
+    <div class="fluid-container h-50">
+        <div class="row h-100 w-100 justify-content-center align-items-center">
+            <div id="are-you-sure">
+                <form method='POST'>{% csrf_token %}
+                    <h4>Are you sure you want to delete the job with <a href="{% url 'job-detail' pk=ex_lead.id %}">
+                        {{ ex_lead.client_id }}</a> 
+                        {% if ex_lead.installation.install_schedule %} 
+                        for {{ ex_lead.installation.install_schedule }}
+                        {% endif %}?
+                    </h4>
+                    <div class="row justify-content-center">
+                        <div class="col-2">
+                            <input class="btn btn-link my-2" type="submit" value="Yes"></input>
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-link my-2" role="button" href="javascript: history.go(-1)">No</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
