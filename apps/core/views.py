@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from management.models import (ProjectType, Customer, Lead, SourceGroup, ProjectGroup,
+from apps.core.models import (ProjectType, Customer, Lead, SourceGroup, ProjectGroup,
 Pictures, Contracts, JobStatus, Permit, Installation, Payment, Message, EntryLog, Services,
 Installer_Payroll, Payroll, Staff_Payroll, Sales_Payroll, Employee_Documents, Employee_Files)
-from management.forms import (DashboardForm, NewUserForm, NewProjectTypeForm, NewAppointmentForm,
+from apps.core.forms import (DashboardForm, NewUserForm, NewProjectTypeForm, NewAppointmentForm,
 SortLeadsRunForm, NewLeadForm, SortJIPForm, SortAccountsForm, EditJobForm, EditPermitForm,
 SortArchivesForm, EditAccountForm, ServiceForm, InstallerForm, StaffForm, SalesForm, InstallAppointmentForm,
 SelectInstallerForm, EditAppointmentCalendarForm, SortPayrollForm, SortPayProcessForm, SalesFormSet,

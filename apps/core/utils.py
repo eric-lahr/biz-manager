@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from .models import Installation, Lead, Customer
-from management.forms import InstallAppointmentForm, EditAppointmentCalendarForm
+from apps.core.forms import InstallAppointmentForm, EditAppointmentCalendarForm
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (Jurisdiction, Employee_Documents, SourceGroup, ProjectGroup,
 Employee_Files)
-from management.forms import EmployeeDocsForm
+from apps.core.forms import EmployeeDocsForm
 
 # Register your models here.
 

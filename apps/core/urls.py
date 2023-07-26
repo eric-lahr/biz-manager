@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from management.views import (AppointmentDetailView, LeadDetailView, JobDetailView, PermitDetailView,
+from apps.core.views import (AppointmentDetailView, LeadDetailView, JobDetailView, PermitDetailView,
 AccountDetailView, ArchiveDetailView, ServiceDetailView, InstallCalendarView, EditInstallCalendarView,
 InstallerCalendarView, AppointmentCalendarView, EditAppointmentCalendarView, HomePageView)
 
