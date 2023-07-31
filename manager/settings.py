@@ -88,7 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'business_manager',
-        'USER': 'datadude',
+        'USER': os.environ['MGR_USR'],
         'PASSWORD': os.environ['MGR_DB_PWD'],
         'HOST': 'localhost',
         'PORT': '',
