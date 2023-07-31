@@ -1,0 +1,86 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Installer Payroll</u></b></h5>
+  </div>
+  {% if messages %}
+  <div class="row mx-2">
+    <div class="col-sm">
+      <ul class="messages" style="list-style-type: none; color: red;">
+          {% for message in messages %}
+          <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+          {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+  <div class="container">
+    <form class="installerpay" enctype="multipart/form-data" method="post">
+      <div class="row mx-2">
+        <div class="col-sm" style="font-size:30px;">
+          <b>{{ pay_change }}</b>
+        </div>
+        {% csrf_token %}    
+        <div class="col-sm">
+          {{ form.job_file|as_crispy_field }}
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-sm">
+          {{ form.job_name|as_crispy_field }}
+        </div>
+        <div class="col-sm">
+          {{ form.date_completed|as_crispy_field }}
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-sm">
+          {{ form.job_address|as_crispy_field }}
+        </div>
+        <div class="col-sm">
+          {{ form.description|as_crispy_field }}
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-sm">
+          {{ form.helper|as_crispy_field }}
+        </div>
+        <div class="col-sm">
+          {{ form.helper_name|as_crispy_field }}
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-sm">
+          {{ form.work_performed|as_crispy_field }}
+        </div>
+        <div class="col-sm">
+          {{ form.amount_owed|as_crispy_field }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="submit">
+            <button type="submit" name="save" class="btn btn-outline-dark my-2">Save</button>
+          </div> 
+        </div>
+        {% if request.user|is_in_group:"admin" %}
+        <div class="col-sm">
+          <div class="submit">
+            <a type="button"
+               href="{% url 'payroll-to-archive' paypk=pay_change.id %}"
+               class="btn btn-outline-dark my-2">Send to Archive</a>
+          </div> 
+        </div>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

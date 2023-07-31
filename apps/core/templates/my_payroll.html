@@ -1,0 +1,180 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+{% if documents %}
+<div class="container" id="installer-docs">
+  <table class="table employee-docs" style="width:60%; margin:auto !important;">
+    <tbody>
+      <tr>
+        <td style="text-align:center"><h5><bold>{{ documents.headline }}</bold></h5></td>
+      </tr>
+      {% if documents.description %}
+      <tr>
+        <td class="document-description" style="text-align:center">{{ documents.description }}</td> 
+      </tr>
+      {% endif %}
+      <tr>
+        <td class="document-list" style="text-align: center;">
+          {% if employee_files %}
+            {% for doc in employee_files %}
+            <a href="{{ doc.document.url }}">{{ doc.title }}</a>
+            {% if not forloop.last %} -----{% endif %} 
+            {% endfor %}
+          {% endif %}
+        </td>
+      </tr>
+    </tbody>    
+  </table>
+  <hr>
+</div>
+{% endif %}
+<div class="container" id="payroll-container">
+  <div class="row">
+    <div class="col-md-4 user_headline mx-2 my-2">
+      <h5><b><u>My Payroll</u></b></h5>
+    </div>
+    <div class="col-md-4 my-auto mx-2">
+      <a id="add-payroll" role="button" class="btn btn-light btn-sm"
+         {% if request.user|is_in_group:"admin" %}
+         href="{% url 'submit-payroll' %}"
+         {% elif request.user|is_in_group:"salesperson" %}
+         href="{% url 'submit-sales' userid=request.user.id %}"
+         {% elif request.user|is_in_group:"staff" %}
+         href="{% url 'submit-staff' userid=request.user.id %}"
+         {% elif request.user|is_in_group:"installer" %}
+         href="{% url 'submit-installer' userid=request.user.id %}"
+         {% endif %}>
+        ADD NEW
+      </a>
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="payroll-block">PAYROLL FOR: {{ user.get_username }}</div>
+  </div>
+  <div class="row">
+    <div class="pagination d-flex flex-row-reverse" id="leadsrun_pagination">
+      <div class="p-3">
+        <p id="leadsort">
+          {% if payroll_item.has_previous %}
+            <span class="userpage"><a href="?page={{ payroll_item.previous_page_number }}">Previous</a></span>
+          {% else %}
+            <span class="userpage off">Previous</span>
+          {% endif %}
+          {% for pg in payroll_item.paginator.page_range %}
+            {% if payroll_item.number == pg %}
+              <span class="userpage active">{{ pg }}</span>
+            {% else %}
+              <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+            {% endif %}
+          {% endfor %}
+          {% if payroll_item.has_next %}
+            <span class="userpage"><a href="?page={{ payroll_item.next_page_number }}">Next</a></span>
+          {% else %}
+            <span class="userpage off">Next</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-7" id="sort">
+      <form class="sortlead" method="post">
+        {% csrf_token %}
+        <div class="form-row" id="sort-form-row">
+          <div class="form-group col-lg-3 my-2">
+            {{ form.order|as_crispy_field }}
+          </div>          
+          <div class="submit form-group col-lg-3">
+            <button type="submit" class="btn btn-outline-dark my-2" id="sortbtn">Show</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="container ml-2">
+      {% if payroll_item.object_list %}
+      <table class="table mypayroll" style="width:100%">
+        <thead>
+          <tr>
+            <th>Payroll ID</th><th>User Name</th><th>Role</th><th>Status</th>
+            <th style="text-align: center;">View</th>
+            <th style="text-align: center;">Edit</th><th style="text-align: center;">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in payroll_item.object_list %}
+          <tr>
+            <td>
+              {{ item.payroll_id }}
+            </td>
+            <td>
+              {{ item.user.first_name }} {{ item.user.last_name }}
+            </td>
+            <td>
+              {% for group in item.user.groups.all %}
+                {{ group }}
+              {% endfor %}
+            </td>
+            <td>
+              {% if item.archived %}archived
+              {% elif item.submitted %}submitted for processing
+              {% else %}current
+              {% endif %}
+            </td>
+            <td style="text-align: center;">
+              {% if item.archived %}
+              <a href="{% url 'payroll-detail' paypk=item.id %}">View</a>
+              {% endif %}
+            </td>
+            <td style="text-align: center;">
+              {% if not item.archived %}
+              <a href="{% url 'payroll-detail' paypk=item.id %}">Edit</a>
+              {% endif %}
+            </td>
+            <td style="text-align: center;">
+              {% if not item.archived %}
+              <a href="{% url 'delete-payroll' paypk=item.id %}">Delete</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>    
+      </table>
+      {% else %}
+        <p>There are no payroll items.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="pagination d-flex flex-row-reverse mb-4">
+      <div class="p-3">
+        <p id="leadsort">
+          {% if payroll_item.has_previous %}
+            <span class="userpage"><a href="?page={{ payroll_item.previous_page_number }}">Previous</a></span>
+          {% else %}
+            <span class="userpage off">Previous</span>
+          {% endif %}
+          {% for pg in payroll_item.paginator.page_range %}
+            {% if payroll_item.number == pg %}
+              <span class="userpage active">{{ pg }}</span>
+            {% else %}
+              <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+            {% endif %}
+          {% endfor %}
+          {% if payroll_item.has_next %}
+            <span class="userpage"><a href="?page={{ payroll_item.next_page_number }}">Next</a></span>
+          {% else %}
+            <span class="userpage off">Next</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/calendars.css' %}">
+{% endblock %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Appointments - {{ installer.first_name }} {{ installer.last_name }} Calendar View</u></b></h5>
+  </div>
+  {% if request.user|is_in_group:"admin" or request.user|is_in_group:"staff" or request.user|is_in_group:"salesperson" %}
+  <div class="selectInstaller mx-2 my-2">
+    <form id="select-installer" action="" method="POST">
+      {% csrf_token %}
+      {{ form.installer|as_crispy_field }}
+    </form>    
+  </div>
+  {% endif %}
+
+  <div class="container my-2">
+      <div class="clearfix">
+          <a class="btn btn-info left" href="{% url 'installer-schedule' pk=installer.id %}?{{ prev_month }}">Previous Month</a>
+          <a class="btn btn-info right" href="{% url 'installer-schedule' pk=installer.id %}?{{ next_month }}">Next Month</a>
+      </div>
+        {{ installercalendar }}
+  </div>
+</div>
+{% endblock %}

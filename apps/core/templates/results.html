@@ -1,0 +1,52 @@
+{% extends "base_generic.html" %}
+{% load static %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="col-md-10 offset-md-1">
+    <div class="fluid-container">
+        <div class="user_headline mx-2 my-4">
+            <h5><b><u>Search Results</u></b></h5>
+        </div>
+        <div class="container col-10 my-5 pt-4 align-self-center">
+            {% if customer_list %}
+            <table class="table search-results" style="width:100%">
+                <tr>
+                    <th>Customer Name</th><th>Address</th><th>City</th><th>Nearest Cross Street</th>
+                    <th>Job Type</th><th>Status</th><th>View</th>
+                </tr>
+                {% for item in customer_list %}
+                <tr>
+                    <td>{{ item.client_id }}</td>
+                    <td>{{ item.client_id.address }}
+                        {% if item.client_id.address1 %}
+                            {{ item.client_id.address1 }}
+                        {% endif %}
+                    </td>
+                    <td>{{ item.client_id.city }}</td><td>{{ item.client_id.nmc_street }}</td>
+                    <td>{% for pt in item.project_type.all %}{{ pt }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if item.lead_status == "6" %}appointment scheduled
+                        {% elif item.lead_status == "5" %}job in progress
+                        {% elif item.lead_status == "4" %}accounts receivable
+                        {% elif item.lead_status == "3" %}archives
+                        {% elif item.lead_status == "2" %}open lead
+                        {% elif item.lead_status == "1" %}none
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url 'job-detail' pk=item.id %}">View</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <div class="my-2">
+                There are no search results.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

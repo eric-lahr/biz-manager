@@ -1,0 +1,142 @@
+{% extends "base_generic.html" %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="col-md-10 offset-md-1">
+    <div class="user_headline mx-2 my-4">
+        <h5><b><u>View Appointments</u></b></h5>
+    </div>
+    <div class="container col-10 my-5 pt-4 align-self-center">
+        <div class="row mb-1">
+            <div class="col-6">
+                Name:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Address:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.address }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Address1:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.address1 }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                City:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.city }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                State:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.state }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Zip Code:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.zip_code }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Gate Code:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.gate_code }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Nearest Major Cross Streets:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.nmc_street }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Home Phone:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.home_phone|default_if_none:"" }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Cell Phone:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.cell_phone|default_if_none:"" }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Email:
+            </div>
+            <div class="col-6">
+                {{ lead.client_id.email_address }}
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-6">
+                Detailed Instructions:
+            </div>
+            <div class="col-6">
+                {{ lead.project_notes }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Salesperson:
+            </div>
+            <div class="col-6">
+                {{ lead.salesperson|default_if_none:"" }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Date & Time of Appointment:
+            </div>
+            <div class="col-6">
+                {{ lead.appointment_date|default_if_none:"" }} {{ lead.appointment_time|default_if_none:"" }}
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-6">
+                Found Us:
+            </div>
+            <div class="col-6">
+                {{ lead.source }}
+            </div>
+        </div>
+        <div class="row col-8 mt-3 align-self-center">
+            {%  if request.user|is_in_group:"admin" %}
+            <a href="{% url 'edit-appointment' leadpk=lead.id %}">Edit</a>|
+            <a href="{% url 'delete-appointment' leadpk=lead.id %}">Delete</a>|
+            {% endif %}
+            <a href="javascript: history.go(-1)">Return</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

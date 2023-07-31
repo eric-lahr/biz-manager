@@ -1,0 +1,103 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Jobs</u></b></h5>
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p id="leadsort">
+        {% if job.has_previous %}
+          <span class="userpage"><a href="?page={{ job.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in job.paginator.page_range %}
+          {% if job.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if job.has_next %}
+          <span class="userpage"><a href="?page={{ job.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="container">
+    {% if job.object_list %}
+    <table class="table jobsinprogress">
+      <thead>
+        <tr>
+          <th>Customer Name</th><th>Address</th><th>City</th><th>Job Type</th>
+          <th>Lead Status</th><th>View</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for job in job.object_list %}
+        <tr>
+            <td class="text-center">{{ job.job.client_id.name }} {{ job.job.client_id.last_name}}</td>
+            <td class="text-center">{{ job.job.client_id.address }} {% if job.job.client_id.address1 %} 
+                {{ job.job.client_id.address1 }} {% endif %}
+            </td class="text-center">
+            <td class="text-center">{{ job.job.client_id.city }}</td class="text-center">
+            <td class="text-center">{% for pt in job.job.project_type.all %} {{ pt }}
+              {% if not forloop.last %}, {% endif %} {% endfor %}
+            </td class="text-center">
+            {% if job.job.lead_status == "5" %}
+            <td class="text-center">In Progress</td class="text-center">
+            {% else %}
+            <td class="text-center">Accounts Receivable</td class="text-center">
+            {% endif %}
+            <td class="text-center">
+              {% if job.job.lead_status == "5" %}
+              <a href="{% url 'job-detail' pk=job.job.id %}">View</a>
+              {% else %}
+              <a href="{% url 'account-detail' pkjob.job.id %}">View</a>
+              {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>    
+    </table>
+
+    {% else %}
+      <p>There are no current jobs.</p>
+    {% endif %}
+
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p id="leadsort">
+        {% if job.has_previous %}
+          <span class="userpage"><a href="?page={{ job.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in job.paginator.page_range %}
+          {% if job.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if job.has_next %}
+          <span class="userpage"><a href="?page={{ job.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

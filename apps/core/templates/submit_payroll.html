@@ -1,0 +1,123 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="col offset-md-1 user_headline my-4">
+    <h5><b><u>Submit Payroll</u></b></h5>
+  </div>
+  {% if messages %}
+  <div class="row mx-2">
+    <div class="col-sm">
+      <ul class="messages" style="list-style-type: none; color: red;">
+          {% for message in messages %}
+          <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+          {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+  <div class="container my-2">
+    <div class="row justify-content-md-center my-2">
+      <div class="col col-lg-3">
+        <div class="pay-head">
+          Installers
+        </div>
+      </div>
+      <div class="col col-lg-3">
+        <div class="pay-head">
+          Office Staff
+        </div>
+      </div>
+      <div class="col col-lg-3">
+        <div class="pay-head">
+          Sales Commission
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center my-3">
+    <div class="col-lg-3 text-center">
+      <div class="add-new">
+        <a class="btn btn-outline-dark" id="newpay" href="{% url 'new-user' %}" role="button">Add New</a>
+      </div>
+    </div>
+    <div class="col-lg-3 text-center">
+      <div class="add-new">
+        <a class="btn btn-outline-dark" id="newpay" href="{% url 'new-user' %}" role="button">Add New</a>
+      </div>
+    </div>
+    <div class="col-lg-3 text-center">
+      <div class="add-new">
+        <a class="btn btn-outline-dark" id="newpay" href="{% url 'new-user' %}" role="button">Add New</a>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-3">
+      <div class="employee-list">
+        {% if installers %}
+        <ul style="list-style:none;">
+        {% for installer in installers %}
+          <li>
+            <a 
+            {% if request.user|is_in_group:"admin" or request.user.id == installer.id %}
+            href="{% url 'submit-installer' userid=installer.id %}"
+            {% else %}
+            href="#"
+            {% endif %}>
+              {{ installer.first_name }} {{ installer.last_name }}
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col col-lg-3">
+      <div class="employee-list">
+        {% if staff %}
+        <ul style="list-style:none;">
+        {% for member in staff %}
+          <li>
+            <a
+            {% if request.user|is_in_group:"admin" or request.user.id == member.id %}
+            href="{% url 'submit-staff' userid=member.id %}"
+            {% else %}
+            href="#"
+            {% endif %}>
+            {{ member.first_name }} {{ member.last_name }}         
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col col-lg-3">
+      <div class="employee-list">
+        {% if salespeople %}
+        <ul style="list-style:none;">
+          {% for person in salespeople %}
+          <li>
+            <a
+            {% if request.user|is_in_group:"admin" or request.user.id == person.id %}
+            href="{% url 'submit-sales' userid=person.id %}"
+            {% else %}
+            href="#"
+            {% endif %}>
+            {{ person.first_name }} {{ person.last_name }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

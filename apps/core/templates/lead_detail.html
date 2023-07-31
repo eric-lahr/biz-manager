@@ -1,0 +1,305 @@
+{% extends "base_generic.html" %}
+{% load filename %}
+{% load thumbnail %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="col-md-10 offset-md-1">
+    <div class="fluid-container">
+        <div class="user_headline mx-2 my-4">
+            <h5><b><u>View Lead</u></b></h5>
+        </div>
+        <div class="container col-10 my-5 pt-4 align-self-center">
+            <div class="row mb-1">
+                <div class="col-6">
+                    Name:
+                </div>
+                <div class="col-6">
+                    {{ lead.client_id }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Address:
+                </div>
+                <div class="col-6">
+                    {{ lead.client_id.address }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Address1:
+                </div>
+                <div class="col-6">
+                    {{ lead.client_id.address1 }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    City:
+                </div>
+                <div class="col-6">
+                    {{ lead.client_id.city }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    State:
+                </div>
+                <div class="col-6">
+                    {{ lead.client_id.state }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Zip Code:
+                </div>
+                <div class="col-6">
+                    {{ lead.client_id.zip_code }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Nearest Major Cross Streets:
+                </div>
+                <div class="col-6">
+                    {{ lead.client_id.nmc_street }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Home Phone:
+                </div>
+                <div class="col-6">
+                    {% if lead.client_id.home_phone %}{{ lead.client_id.home_phone }}{% endif %}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Cell Phone:
+                </div>
+                <div class="col-6">
+                    {% if lead.client_id.cell_phone %}{{ lead.client_id.cell_phone }}{% endif %}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Fax Number:
+                </div>
+                <div class="col-6">
+                    {% if lead.client_id.fax_number %}{{ lead.client_id.fax_number }}{% endif %}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Email:
+                </div>
+                <div class="col-6">
+                    {{ lead.client_id.email_address }}
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-6 my-auto">
+                    Project Notes:
+                </div>
+                <div class="col-6" style="border: 1px solid black;">
+                    {{ lead.project_notes }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Salesperson:
+                </div>
+                <div class="col-6">
+                    {{ lead.salesperson|default_if_none:"" }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Sales Date:
+                </div>
+                <div class="col-6">
+                    {{ lead.jobstatus.sale_date|default_if_none:"" }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Date Appointment Run:
+                </div>
+                <div class="col-6">
+                    {{ lead.appointment_date|default_if_none:"" }} {{ lead.appointment_time|default_if_none:"" }}
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-6">
+                    Project Type:
+                </div>
+                <div class="col-6">
+                    {% for pt in lead.project_type.all %} {{ forloop.counter }}.{{ pt }}
+                    {% if not forloop.last %}, {% endif %} {% endfor %}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Association Approval Needed:
+                </div>
+                <div class="col-6">
+                    {{ lead.jobstatus.get_association_approval_display }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Permits:
+                </div>
+                <div class="col-6">
+                    {{ lead.permit.get_status_display }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Materials Ordered ?:
+                </div>
+                <div class="col-6">
+                    {{ lead.jobstatus.materials_ordered|yesno|title }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Concrete Existing:
+                </div>
+                <div class="col-6">
+                    {{ lead.jobstatus.get_concrete_existing_display }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Footers Needed:
+                </div>
+                <div class="col-6" id="footer-needed-view">
+                    {{ lead.jobstatus.get_footer_needed_display|title }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Safety Stakes:
+                </div>
+                <div class="col-6">
+                    {{ lead.jobstatus.safety_stakes|yesno|title }}
+                </div>
+            </div>
+            <div id='show-if-yes'>
+                <div class="row mb-1">
+                    <div class="col-6">
+                        Footer Dig Date:
+                    </div>
+                    <div class="col-6">
+                        {{ lead.installation.footer_dig_date }}
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-6">
+                        Footer Inspection Date:
+                    </div>
+                    <div class="col-6">
+                        {{ lead.installation.footer_inspection_date }}
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-6">
+                        Footer Pour Date:
+                    </div>
+                    <div class="col-6">
+                        {{ lead.installation.footer_pour_date }}
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Lead Status:
+                </div>
+                <div class="col-6">
+                    {% if lead.lead_cur_status != "0" %}{{ lead.get_lead_cur_status_display }}{% endif %}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Contract Amount:
+                </div>
+                <div class="col-6">
+                    {% if lead.contract_amount %}${% endif %}{{ lead.contract_amount|default_if_none:"" }}
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Payment:
+                </div>
+                <div class="col-6" id="payment-status-view">
+                    {{ lead.payment.get_status_display }}
+                </div>
+            </div>
+            <div id="show-if-deposit">
+                <div class="row mb-1">
+                    <div class="col-6">
+                        Amount:
+                    </div>
+                    <div class="col-6">
+                        {{ lead.payment.amount }}
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-6">
+                    Contracts/Images:
+                </div>
+                <div class="col-6">
+                    <ul style="list-style-type: none;">
+                    {% for contract in lead_files %}
+                        <li><a href="{{ contract.document.url }}">{{ contract.document|filename }}</a></li>
+                    {% endfor %}
+                    {% for photo in lead_photos %}
+                        {% thumbnail photo.photos "160x150" crop="center" as im %}
+                            <br>
+                            <li><a href="{{ photo.photos.url }}"><img src="{{ im.url }}" height="{{ im.height }}" width="{{ im.width }}"></a></li>
+                        {% endthumbnail %}
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="row mb-1">
+                    <div class="col-6">
+                        Priority:
+                    </div>
+                    <div class="col-6">
+                        {{ lead.priority|yesno:"Yes, No" }}
+                    </div>
+                </div>
+            </div>
+            {% if lead.priority %}
+            <div>
+                <div class="row mb-1">
+                    <div class="col-6">
+                        Priority Notes:
+                    </div>
+                    <div class="col-6">
+                        {{ lead.priority_msg }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row col-8 mt-3 align-self-center">
+                {%  if request.user|is_in_group:"admin" %}
+                <a href="{% url 'edit-lead' leadpk=lead.id %}">Edit</a>|
+                <a href="{% url 'delete-lead' leadpk=lead.id %}">Delete</a>|
+                {% endif %}
+                <a href="javascript: history.go(-1)">Return</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'scripts/view_lead.js' %}" type="module"></script>
+{% endblock %}

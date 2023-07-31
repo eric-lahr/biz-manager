@@ -1,0 +1,99 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load filename %}
+{% load thumbnail %}
+{% load static %}
+
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-11 offset-md-1">
+    <div class="container-fluid">
+        <div class="row my-3"><u>Edit Account</u></div>
+        <form class="edituser" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ form.name|as_crispy_field }}
+            {{ form.last_name|as_crispy_field }}
+            {{ form.address|as_crispy_field }}
+            {{ form.address1|as_crispy_field }}
+            {{ form.city|as_crispy_field }}
+            {{ form.state|as_crispy_field }}
+            {{ form.zip_code|as_crispy_field }}
+            {{ form.nmc_street|as_crispy_field }}
+            {{ form.home_phone|as_crispy_field }}
+            {{ form.cell_phone|as_crispy_field }}
+            {{ form.fax_number|as_crispy_field }}
+            {{ form.email|as_crispy_field }}
+            {{ form.detailed_instr|as_crispy_field }}
+            <div class="container-fluid my-4">
+                <div class="col-sm-8 offset-sm-4">
+                    <input type="checkbox" name="priority-choice" id="priority-choice"
+                        {% if form.priority.initial %}checked{% endif %}>
+                    <label for="priority-choice">Priority</label>
+                    <div class="reveal-if-active">
+                        Message:
+                        {{ form.priority_notes|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+            {{ form.association_approval|as_crispy_field }}
+            {{ form.permits|as_crispy_field }}
+            {{ form.materials_ordered|as_crispy_field }}
+            {{ form.concrete_existing|as_crispy_field }}
+            {{ form.footer_needed|as_crispy_field }}
+            <div class="container mx-auto " style="width: 300px;">
+                <div id="reveal-if-footer" style="display:none;">
+                        Footer Dig Date:
+                        {{ form.footer_dig_date|as_crispy_field }}
+                        Footer Inspection Date:
+                        {{ form.footer_inspection_date|as_crispy_field }}
+                        Footer Pour Date:
+                        {{ form.footer_pour_date|as_crispy_field }}
+                </div>
+            </div>
+            {{ form.safety_stakes|as_crispy_field }}
+            {{ form.payments|as_crispy_field }}
+            <div class="container mx-auto" style="width: 300px">
+                <div id="reveal-if-deposit" style="display: none;">
+                    {{ form.downpayment|as_crispy_field }}
+                </div>
+            </div>
+            {{ form.salesperson|as_crispy_field }}
+            {{ form.schedule_date|as_crispy_field }}
+            {{ form.installer|as_crispy_field }}
+            {{ form.project_type|as_crispy_field }}
+            {{ form.alumalattice|as_crispy_field }}
+            {{ form.contract_amount|as_crispy_field }}
+            {{ form.price_breakdown|as_crispy_field }}
+            {{ form.contracts|as_crispy_field }}
+            {{ form.images|as_crispy_field }}
+
+            <div class="col-6">
+                <table class="table">
+                    {% for contract in job_files %}
+                    <tr>
+                        <td><a href="{{ contract.document.url }}">{{ contract.document|filename }}</a></td>
+                        <td><a href="{% url 'confirm-delete-cont' contpk=contract.id %}">Remove</a></td>
+                    </tr>
+                    {% endfor %}
+                    {% for photo in job_photos %}
+                    {% thumbnail photo.photos "160x150" crop="center" as im %}
+                    <tr>
+                        <td><a href="{{ photo.photos.url }}"><img src="{{ im.url }}" height="{{ im.height }}" width="{{ im.width }}"></a></td>
+                        <td><a href="{% url 'confirm-delete-photo' photopk=photo.id %}">Remove</a></td>
+                    </tr>
+                    {% endthumbnail %}
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div class="submit">
+                <button type="submit" class="btn btn-outline-dark my-2">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{% static 'scripts/edit_lead.js' %}" type="module"></script>
+{% endblock %}

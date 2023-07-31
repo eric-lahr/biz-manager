@@ -1,0 +1,154 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="col-md-11 offset-md-1">
+    <div class="row justify-content-md-center">
+      <div class="text-center">Staff Member: {{ staff_mem.first_name }} {{ staff_mem.last_name }}</div>
+    </div>
+    <div class="row">
+      <div class="user_headline mx-2 my-4">
+        <h5><b><u>Office Staff Payroll</u></b></h5>
+      </div>
+    </div>
+    {% if messages %}
+    <div class="row mx-2">
+      <div class="col-sm">
+        <ul class="messages" style="list-style-type: none; color: red;">
+            {% for message in messages %}
+            <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+    <div class="row">
+      <div class="container">
+        <form class="staffpay" enctype="multipart/form-data" method="post">
+          {% if form.errors %}
+              {% for field in form %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                  {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                  <div class="alert alert-danger">
+                      <strong>{{ error|escape }}</strong>
+                  </div>
+              {% endfor %}
+          {% endif %}
+          <div class="row">
+            <table class="staff-pay" style="width:100%;">
+              <col>
+              <colgroup span="2"></colgroup>
+              <colgroup span="2"></colgroup>
+              <colgroup span="2"></colgroup>
+              <thead>
+                <tr>
+                  <th colspan="2" scope="colgroup"></th>
+                  <th colspan="2" scope="colgroup" style="text-align: center; padding-right: 2em;">Clock In</th>
+                  <th colspan="2" scope="colgroup" style="text-align: center; padding-right: 2em;">Clock Out</th>
+                </tr>
+                <tr>
+                  <th>Days</th><th></th><th scope="col" style="padding-left: 2em;">Hours</th>
+                  <th scope="col" style="padding-left: 2em;">Minutes</th>
+                  <th scope="col" style="padding-left: 2em;">Hours</th>
+                  <th scope="col" style="padding-left: 2em;">Minutes</th>
+                  <th style="padding-left: 1em;">Total Hrs</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="space" scope="row">{% csrf_token %}</tr>
+                <tr scope="row">
+                  <td>Monday</td><td style="padding-left: 2em;">{{ form.monday_date|as_crispy_field }}</td>
+                  <td>{{ form.monday_in_hr|as_crispy_field }}</td><td>{{ form.monday_in_min|as_crispy_field }}</td>
+                  <td>{{ form.monday_out_hr|as_crispy_field }}</td><td>{{ form.monday_out_min|as_crispy_field }}</td>
+                  <td>{{ form.monday_tot|as_crispy_field }}</td>
+                </tr>
+                <tr scope="row">
+                  <td>Tuesday</td><td style="padding-left: 2em;">{{ form.tuesday_date|as_crispy_field }}</td>
+                  <td>{{ form.tuesday_in_hr|as_crispy_field }}</td><td>{{ form.tuesday_in_min|as_crispy_field }}</td>
+                  <td>{{ form.tuesday_out_hr|as_crispy_field }}</td><td>{{ form.tuesday_out_min|as_crispy_field }}</td>
+                  <td>{{ form.tuesday_tot|as_crispy_field }}</td>
+                </tr>
+                <tr scope="row">
+                  <td>Wednesday</td><td style="padding-left: 2em;">{{ form.wednesday_date|as_crispy_field }}</td>
+                  <td>{{ form.wednesday_in_hr|as_crispy_field }}</td><td>{{ form.wednesday_in_min|as_crispy_field }}</td>
+                  <td>{{ form.wednesday_out_hr|as_crispy_field }}</td><td>{{ form.wednesday_out_min|as_crispy_field }}</td>
+                  <td>{{ form.wednesday_tot|as_crispy_field }}</td>
+                </tr>
+                <tr scope="row">
+                  <td>Thursday</td><td style="padding-left: 2em;">{{ form.thursday_date|as_crispy_field }}</td>
+                  <td>{{ form.thursday_in_hr|as_crispy_field }}</td><td>{{ form.thursday_in_min|as_crispy_field }}</td>
+                  <td>{{ form.thursday_out_hr|as_crispy_field }}</td><td>{{ form.thursday_out_min|as_crispy_field }}</td>
+                  <td>{{ form.thursday_tot|as_crispy_field }}</td>
+                </tr>
+                <tr scope="row">
+                  <td>Friday</td><td style="padding-left: 2em;">{{ form.friday_date|as_crispy_field }}</td>
+                  <td>{{ form.friday_in_hr|as_crispy_field }}</td><td>{{ form.friday_in_min|as_crispy_field }}</td>
+                  <td>{{ form.friday_out_hr|as_crispy_field }}</td><td>{{ form.friday_out_min|as_crispy_field }}</td>
+                  <td>{{ form.friday_tot|as_crispy_field }}</td>
+                </tr>
+                <tr scope="row">
+                  <td>Saturday</td><td style="padding-left: 2em;">{{ form.saturday_date|as_crispy_field }}</td>
+                  <td>{{ form.saturday_in_hr|as_crispy_field }}</td><td>{{ form.saturday_in_min|as_crispy_field }}</td>
+                  <td>{{ form.saturday_out_hr|as_crispy_field }}</td><td>{{ form.saturday_out_min|as_crispy_field }}</td>
+                  <td>{{ form.saturday_tot|as_crispy_field }}</td>
+                </tr>
+                <tr scope="row">
+                  <td>Sunday</td><td style="padding-left: 2em;">{{ form.sunday_date|as_crispy_field }}</td>
+                  <td>{{ form.sunday_in_hr|as_crispy_field }}</td><td>{{ form.sunday_in_min|as_crispy_field }}</td>
+                  <td>{{ form.sunday_out_hr|as_crispy_field }}</td><td>{{ form.sunday_out_min|as_crispy_field }}</td>
+                  <td>{{ form.sunday_tot|as_crispy_field }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row my-2">
+            <div class="col-3">
+              {{ form.hourly_rate|as_crispy_field }}
+            </div>
+            <div class="col-6" style="padding-left: 2em;">
+              {{ form.week_start_date|as_crispy_field }}
+            </div>
+            <div class="col-3" style="padding-left: 3em;">
+              <div class="float-right">
+              {{ form.weekly_hours|as_crispy_field }}
+              </div>
+            </div>
+          </div>
+          <div class="row my-2">
+            <div>
+              {{ form.payroll_notes|as_crispy_field }}
+            </div>
+          </div>
+          <div class="row my-2">
+            {{ form.upload_file|as_crispy_field }}
+          </div>
+          {% if not pay_change.archived %}
+          <div class="row">
+            <div class="col-sm">
+              <div class="submit">
+                <button type="submit" name="save" class="btn btn-outline-dark my-2">Save and Refresh</button>
+              </div> 
+            </div>
+            <div class="col-sm">
+              <div class="submit">
+                <button type="submit" name="submit" class="btn btn-outline-dark my-2">Submit for Processing</button>
+              </div> 
+            </div>
+          </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'scripts/staff_pay.js' %}" type="module"></script>
+{% endblock %}

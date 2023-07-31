@@ -1,0 +1,148 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load groupname %}
+{% block profile %}
+    <p class="welcome mr-1">Welcome, {{ user.get_username }}!</p><a href="{% url 'logout' %}">Log Out</a>
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="user_headline mx-2 my-4">
+    <h5><b><u>Jobs in Progress</u></b></h5>
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p id="leadsort">
+        {% if job_in_prog.has_previous %}
+          <span class="userpage"><a href="?page={{ job_in_prog.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in job_in_prog.paginator.page_range %}
+          {% if job_in_prog.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if job_in_prog.has_next %}
+          <span class="userpage"><a href="?page={{ job_in_prog.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="col-lg-7" id="sort">
+    <form class="sortlead" method="post">
+      {% csrf_token %}
+      <div class="form-row" id="sort-form-row">
+        <div class="form-group col-lg-6 my-4">
+          {{ form.sort_by|as_crispy_field }}
+        </div>
+        <div class="form-group col-lg-3 my-4">
+          {{ form.order|as_crispy_field }}
+        </div>
+        
+        <div class="submit form-group col-lg-3">
+          <button type="submit" class="btn btn-outline-dark my-4" id="sortbtn">Show</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="container mt-2">
+    {% if job_in_prog.object_list %}
+    <table class="table jobsinprogress">
+      <thead>
+        <tr>
+          <th>Customer Name</th><th>Address</th><th>City</th><th>Job Type</th><th>Installer</th>
+          <th>Installation Date Scheduled</th>
+          {% if request.user|is_in_group:"admin" %}
+          <th>Send Order to Leads (cancelled order)</th>
+          <th>Send Order to Accounts Receivable (job done)</th>
+          {% endif %}
+          <th>View</th>
+          {% if request.user|is_in_group:"admin" %}
+          <th>Edit</th>
+          <th>Delete</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for job in job_in_prog.object_list %}
+        <tr {% if job.lead_cur_status == "1" %} class="cold"
+            {% elif job.lead_cur_status == "3" %} class="hot" {% endif %}
+            {% if job.priority %} id="priority" {% endif %}>
+            <td>{{ job.client_id.name }} {{ job.client_id.last_name}}
+              {% if job.priority %}<span class="CellComment">{{ job.priority_msg }}</span>{% endif %}
+            </td>
+            <td>{{ job.client_id.address }} {% if job.client_id.address1 %} 
+                {{ job.client_id.address1 }} {% endif %}
+                {% if job.priority %}<span class="CellComment">{{ job.priority_msg }}</span>{% endif %}
+            </td>
+            <td>{{ job.client_id.city }}
+              {% if job.priority %}<span class="CellComment">{{ job.priority_msg }}</span>{% endif %}
+            </td>
+            <td>{% for pt in job.project_type.all %}{{ pt }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              {% if job.priority %}<span class="CellComment">{{ job.priority_msg }}</span>{% endif %}
+            </td>
+            <td class="text-center">
+              {% if job.installation.installer %}{{ job.installation.installer }}{% endif %}
+              {% if job.priority %}<span class="CellComment">{{ job.priority_msg }}</span>{% endif %}
+            </td>
+            <td class="text-center">{{ job.installation.install_schedule }}
+              {% if job.priority %}<span class="CellComment">{{ job.priority_msg }}</span>{% endif %}
+            </td>
+            {% if request.user|is_in_group:"admin" %}
+            <td class="text-center"><a id="send-confirmation"
+                                       href="{% url 'send-to-leads-run' leadpk=job.id %}"
+                                       data-leadpk="{{ job.id }}">Send</a></td>
+            <td class="text-center"><a id="receive-confirm"
+                                       href="{% url 'send-to-receivable' leadpk=job.id %}"
+                                       data-leadpk="{{ job.id }}">Send</a></td>
+            {% endif %}
+            <td class="text-center"><a href="{% url 'job-detail' pk=job.id %}">View</a></td>
+            {% if request.user|is_in_group:"admin" %}
+            <td><a href="{% url 'edit-job' leadpk=job.id %}">Edit</a></td>
+            <td><a href="{% url 'delete-job' leadpk=job.id %}">Delete</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>    
+    </table>
+
+    {% else %}
+      <p>There are no jobs in progress.</p>
+    {% endif %}    
+
+  </div>
+
+  <div class="pagination d-flex flex-row-reverse">
+    <div class="p-3">
+      <p id="leadsort">
+        {% if job_in_prog.has_previous %}
+          <span class="userpage"><a href="?page={{ job_in_prog.previous_page_number }}">Previous</a></span>
+        {% else %}
+          <span class="userpage off">Previous</span>
+        {% endif %}
+        {% for pg in job_in_prog.paginator.page_range %}
+          {% if job_in_prog.number == pg %}
+            <span class="userpage active">{{ pg }}</span>
+          {% else %}
+            <span class="userpage"><a href="?page={{ pg }}">{{ pg }}</a></span>
+          {% endif %}
+        {% endfor %}
+        {% if job_in_prog.has_next %}
+          <span class="userpage"><a href="?page={{ job_in_prog.next_page_number }}">Next</a></span>
+        {% else %}
+          <span class="userpage off">Next</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
