@@ -26,7 +26,7 @@ SECRET_KEY = os.environ['MGR_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'phone_field',
     'crispy_forms',
     'sorl.thumbnail',
+    'storages',
+    'zappa_django_utils'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -87,11 +89,11 @@ WSGI_APPLICATION = 'manager.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'business_manager',
-        'USER': os.environ['MGR_USR'],
-        'PASSWORD': os.environ['MGR_DB_PWD'],
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': os.environ['RDS_DB_NAME'],
+        'USER': os.environ['RDS_USERNAME'],
+        'PASSWORD': os.environ['RDS_PASSWORD'],
+        'HOST': os.environ['RDS_HOSTNAME'],
+        'PORT': os.environ['RDS_PORT'],
     }
 }
 
