@@ -1,0 +1,9 @@
+{
+    "prod": {
+        "django_settings": "manager.settings",
+        "profile_name": "default",
+        "project_name": "biz-manager",
+        "runtime": "python3.8",
+        "s3_bucket": "ss-app-zappa-s3-bp-zappa-s3-bucket"
+    }
+}
