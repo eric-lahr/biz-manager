@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['MGR_KEY']
+SECRET_KEY = 'c+&0gw!&uzb5f(5)d37=-b3&79j&@p86s-s^(ar8qus^v-l5hg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -89,11 +89,11 @@ WSGI_APPLICATION = 'manager.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'business_manager',
-        'USER': os.environ['MGR_DB_USR'],
-        'PASSWORD': os.environ['MGR_DB_PWD'],
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': os.environ['RDS_DB_NAME'],
+        'USER': os.environ['RDS_USERNAME'],
+        'PASSWORD': os.environ['RDS_PASSWORD'],
+        'HOST': os.environ['RDS_HOSTNAME'],
+        'PORT': os.environ['RDS_PORT'],
     }
 }
 

@@ -1,9 +1,22 @@
 {
     "prod": {
+        "aws_region": "us-west-1",
         "django_settings": "manager.settings",
         "profile_name": "default",
         "project_name": "biz-manager",
         "runtime": "python3.8",
-        "s3_bucket": "ss-app-zappa-s3-bp-zappa-s3-bucket"
+        "s3_bucket": "ss-app-zappa-s3-bucket",
+        "slim_handler": true,
+        "remote_env": "s3://ss-app-config-prod/ss-app-configs/prod.json",
+        "vpc_config": {
+            "SubnetIds": [
+                "subnet-0a36564db9f7a8744",
+                "subnet-0047328d717fa730b",
+                "subnet-0655625878071e8bb"
+            ],
+            "SecurityGroupIds": [
+                "sg-0c3fb49d7a589273d"
+            ]
+        }
     }
 }
