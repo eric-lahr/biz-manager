@@ -1,15 +1,16 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as rds from 'aws-cdk-lib/aws-rds';
+import * as cdk from 'aws-cdk-lib'
+import { Construct } from 'constructs'
+import * as ec2 from 'aws-cdk-lib/aws-ec2'
+import * as rds from 'aws-cdk-lib/aws-rds'
+import * as s3 from 'aws-cdk-lib/aws-s3'
 
 export class BizmgrInfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
     
     const natGatewayProvider = ec2.NatProvider.instance({
       instanceType: new ec2.InstanceType('t3a.nano'),
-    });
+    })
 
     const vpc = new ec2.Vpc(this, 'Vpc', {
       ipAddresses: ec2.IpAddresses.cidr('172.16.0.0/19'),
@@ -48,8 +49,8 @@ export class BizmgrInfraStack extends cdk.Stack {
       description: 'SG for RDS',
       allowAllOutbound: false,
       disableInlineRules: true
-    });
-    // rdsSecurityGroup.addIngressRule(ec2.Peer.ipv4('1.1.1.1/32'), ec2.Port.tcp(3306), 'MySQL from an explicit external address');
+    })
+    // rdsSecurityGroup.addIngressRule(ec2.Peer.ipv4('1.1.1.1/32'), ec2.Port.tcp(3306), 'MySQL from an explicit external address')
 
 
     const deployerSecurityGroup = new ec2.SecurityGroup(this, 'Deployer', {
@@ -57,7 +58,7 @@ export class BizmgrInfraStack extends cdk.Stack {
       description: 'SG for the Deployer (Zappa internal stuff etc)',
       allowAllOutbound: true,
       disableInlineRules: true
-    });
+    })
     rdsSecurityGroup.addIngressRule(deployerSecurityGroup, ec2.Port.tcp(3306), 'MySQL From Deployer SG')
 
     const lambdaOpenSecurityGroup = new ec2.SecurityGroup(this, 'LambdaAppOpen', {
@@ -65,7 +66,7 @@ export class BizmgrInfraStack extends cdk.Stack {
       description: 'SG for Lambda functions, allows internet & RDS',
       allowAllOutbound: true,
       disableInlineRules: true
-    });
+    })
     rdsSecurityGroup.addIngressRule(lambdaOpenSecurityGroup, ec2.Port.tcp(3306), 'MySQL From Lambda Open SG')
     lambdaOpenSecurityGroup.addEgressRule(rdsSecurityGroup, ec2.Port.tcp(3306), 'MySQL to RDS SG') // Not directly needed as we allow all egress here, but we'll add explicitly nonetheless
     
@@ -74,7 +75,7 @@ export class BizmgrInfraStack extends cdk.Stack {
       description: 'SG for Lambda functions, RDS only',
       allowAllOutbound: false,
       disableInlineRules: true
-    });
+    })
     rdsSecurityGroup.addIngressRule(lambdaClosedSecurityGroup, ec2.Port.tcp(3306), 'MySQL From Lambda Closed SG')
     lambdaClosedSecurityGroup.addEgressRule(rdsSecurityGroup, ec2.Port.tcp(3306), 'MySQL to RDS SG')
 
@@ -99,7 +100,23 @@ export class BizmgrInfraStack extends cdk.Stack {
       securityGroups: [
         rdsSecurityGroup
       ]
-    });
+    })
+
+    const zappaAppConfig = new s3.Bucket(this, 'ZappaAppConfig', {
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true,
+      versioned: false,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    })
+
+    const zappaAppBucket = new s3.Bucket(this, 'ZappaAppBucket', {
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true,
+      versioned: false,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    })
 
   }
 }
