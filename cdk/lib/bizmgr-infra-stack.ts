@@ -31,7 +31,15 @@ export class BizmgrInfraStack extends cdk.Stack {
           name: 'private',
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
         }
-     ]
+     ],
+     gatewayEndpoints: { // This allows access to DynamoDB & S3 without the use of NAT.
+        S3: {
+          service: ec2.GatewayVpcEndpointAwsService.S3,
+        },
+        DYNAMODB: {
+          service: ec2.GatewayVpcEndpointAwsService.DYNAMODB,
+        },
+      }
     })
 
     // Your Security Groups can be defined here
