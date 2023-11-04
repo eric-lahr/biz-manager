@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['MGR_KEY']
+SECRET_KEY = 'c+&0gw!&uzb5f(5)d37=-b3&79j&@p86s-s^(ar8qus^v-l5hg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -169,3 +169,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = 'enter'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

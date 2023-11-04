@@ -66,8 +66,7 @@ wheels/
 .installed.cfg 
 *.egg 
 *.manifest 
-*.spec
-zappa_settings.json
+*.spec 
 
 # Installer logs 
 pip-log.txt 
