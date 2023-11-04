@@ -68,6 +68,8 @@ wheels/
 *.manifest 
 *.spec
 zappa_settings.json
+.DS_Store
+*.DS_Store
 
 # Installer logs 
 pip-log.txt 

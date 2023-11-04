@@ -21,12 +21,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['MGR_KEY']
+#SECRET_KEY = os.environ['MGR_KEY']
+SECRET_KEY = 'y&g%+gd9dj4k%z5xdhqla9vb-&7e8ec_yyl3+3agc06^pdl_g#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'localhost']
 
 
 # Application definition
@@ -89,11 +90,11 @@ WSGI_APPLICATION = 'manager.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['RDS_DB_NAME'],
-        'USER': os.environ['RDS_USERNAME'],
-        'PASSWORD': os.environ['RDS_PASSWORD'],
-        'HOST': os.environ['RDS_HOSTNAME'],
-        'PORT': os.environ['RDS_PORT'],
+        'NAME': 'contractor', #os.environ['RDS_DB_NAME'],
+        'USER': 'brucewayne', #os.environ['RDS_USERNAME'],
+        'PASSWORD': 'batusi68', #os.environ['RDS_PASSWORD'],
+        'HOST': 'localhost', #os.environ['RDS_HOSTNAME'],
+        'PORT': '', #os.environ['RDS_PORT'],
     }
 }
 
@@ -122,29 +123,29 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGGING_CONFIG = None
 
 # Get loglevel from env
-LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'info').upper()
+# LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'info').upper()
 
-logging.config.dictConfig({
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'console': {
-            'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'console',
-        },
-    },
-    'loggers': {
-        '': {
-            'level': LOGLEVEL,
-            'handlers': ['console',],
-        },
-    },
-})
+# logging.config.dictConfig({
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'console': {
+#             'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s',
+#         },
+#     },
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'console',
+#         },
+#     },
+#     'loggers': {
+#         '': {
+#             'level': LOGLEVEL,
+#             'handlers': ['console',],
+#         },
+#     },
+# })
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -169,3 +170,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = 'enter'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
