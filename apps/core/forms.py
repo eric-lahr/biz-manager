@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, Textarea, HiddenInput
 from apps.core.models import (Message, Customer, Lead, ProjectType, SourceGroup, ProjectGroup,
-JobStatus, Jurisdiction, Installation, Employee_Documents, Sales_Payroll)
+JobStatus, Jurisdiction, Installation, Employee_Documents, Sales_Payroll) 
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
