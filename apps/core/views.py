@@ -1515,6 +1515,7 @@ def edit_job(request, leadpk):
             else:
                 change_job = JobStatus(lead=change_lead, sale_date=sales_date,
                                     association_approval=association_approval,
+                                    permits=permits,
                                     materials_ordered=materials_ordered,
                                     concrete_existing=concrete_existing,
                                     footer_needed=footer_needed,
