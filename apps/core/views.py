@@ -1090,6 +1090,7 @@ def edit_lead(request, leadpk):
             else:
                 change_job = JobStatus(lead=change_lead, sale_date=sales_date,
                                     association_approval=association_approval,
+                                    permits=permits,
                                     materials_ordered=materials_ordered,
                                     concrete_existing=concrete_existing,
                                     footer_needed=footer_needed,
@@ -1176,6 +1177,7 @@ def edit_lead(request, leadpk):
         if change_job:
             form.initial['sales_date'] = change_job.sale_date
             form.initial['association_approval'] = change_job.association_approval
+            form.initial['permits'] = change_permit.status
             form.initial['materials_ordered'] = change_job.materials_ordered
             form.initial['concrete_existing'] = change_job.concrete_existing
             form.initial['footer_needed'] = change_job.footer_needed
@@ -1590,6 +1592,7 @@ def edit_job(request, leadpk):
         if change_job:
             form.initial['sales_date'] = change_job.sale_date
             form.initial['association_approval'] = change_job.association_approval
+            form.initial['permits'] = change_permit.status
             form.initial['materials_ordered'] = change_job.materials_ordered
             form.initial['concrete_existing'] = change_job.concrete_existing
             form.initial['footer_needed'] = change_job.footer_needed
